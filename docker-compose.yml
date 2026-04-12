@@ -1,0 +1,11 @@
+services:
+  app:
+    container_name: nextjs-app
+    build:
+      context: https://github.com/KauTryKauCuba/0001.git
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    restart: always
+    environment:
+      - NODE_ENV=production
