@@ -124,6 +124,11 @@
   body {
     @apply bg-background text-foreground;
   }
+  
+  .bg-dot-grid {
+    background-image: radial-gradient(color-mix(in oklch, var(--border), black 10%) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
   html {
     @apply font-sans;
   }

@@ -23,7 +23,10 @@ export default function RootLayout({
       lang="en"
       className={`${inter.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col relative">
+        <div className="fixed inset-0 -z-50 size-full bg-dot-grid pointer-events-none" />
+        {children}
+      </body>
     </html>
   );
 }
