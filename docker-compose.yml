@@ -2,8 +2,10 @@ services:
   app:
     container_name: nextjs-app
     build:
-      context: https://github.com/KauTryKauCuba/0001.git
+      context: https://github.com/KauTryKauCuba/0001.git#main
       dockerfile: Dockerfile
+      # This line fixes the DNS/internet issue during build
+      network: host
     ports:
       - "3000:3000"
     restart: always
