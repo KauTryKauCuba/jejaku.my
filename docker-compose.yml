@@ -11,6 +11,3 @@ services:
     restart: always
     environment:
       - NODE_ENV=production
-
-
-cloudflared tunnel route dns first jejaku.my
