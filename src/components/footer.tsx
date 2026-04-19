@@ -34,7 +34,7 @@ const footerLinks = [
 export function Footer() {
   return (
     <footer className="border-t bg-background">
-      <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8">
+      <div className="mx-auto max-w-7xl px-6 py-8 lg:px-8">
         <div className="xl:grid xl:grid-cols-3 xl:gap-8">
           <div className="space-y-8">
             <Link href="/" className="flex items-center space-x-2">
@@ -120,7 +120,7 @@ export function Footer() {
             </div>
           </div>
         </div>
-        <div className="mt-16 border-t pt-8 sm:mt-20 lg:mt-24">
+        <div className="mt-12 border-t pt-8 sm:mt-16 lg:mt-20">
           <p className="text-xs leading-5 text-muted-foreground">
             &copy; {new Date().getFullYear()} Jejaku.my. All rights reserved.
           </p>
