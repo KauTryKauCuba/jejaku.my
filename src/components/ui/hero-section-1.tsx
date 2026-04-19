@@ -6,7 +6,7 @@ import { ArrowRight, ChevronRight, Menu, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { ModeToggle } from '@/components/mode-toggle'
-import { Logo } from '@/components/ui/Logo'
+import { Logo } from '@/components/ui/SiteLogo'
 import Image from 'next/image'
 
 export function HeroSection() {

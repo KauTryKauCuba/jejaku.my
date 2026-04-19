@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Logo } from '@/components/ui/Logo'
+import { Logo } from '@/components/ui/SiteLogo'
 import { Code2, MessageCircle, Globe, Mail } from 'lucide-react'
 
 const footerLinks = [
