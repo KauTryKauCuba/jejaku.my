@@ -52,7 +52,7 @@ export function HeroSection() {
                                             asChild
                                             size="lg"
                                             className="rounded-xl px-5 text-base">
-                                            <Link href="#link">
+                                            <Link href="/features">
                                                 <span className="text-nowrap">Start Building</span>
                                             </Link>
                                         </Button>
@@ -62,7 +62,7 @@ export function HeroSection() {
                                         size="lg"
                                         variant="ghost"
                                         className="h-10.5 rounded-xl px-5">
-                                        <Link href="#link">
+                                        <Link href="/pricing">
                                             <span className="text-nowrap">Request a demo</span>
                                         </Link>
                                     </Button>
@@ -96,7 +96,7 @@ export function HeroSection() {
                     <div className="group relative m-auto max-w-5xl px-6">
                         <div className="absolute inset-0 z-10 flex scale-95 items-center justify-center opacity-0 duration-500 group-hover:scale-100 group-hover:opacity-100">
                             <Link
-                                href="/"
+                                href="/about"
                                 className="block text-sm duration-150 hover:opacity-75">
                                 <span> Meet Our Customers</span>
 
@@ -187,10 +187,10 @@ export function HeroSection() {
 }
 
 const menuItems = [
-    { name: 'Features', href: '#link' },
-    { name: 'Solution', href: '#link' },
-    { name: 'Pricing', href: '#link' },
-    { name: 'About', href: '#link' },
+    { name: 'Features', href: '/features' },
+    { name: 'Solution', href: '/solutions' },
+    { name: 'Pricing', href: '/pricing' },
+    { name: 'About', href: '/about' },
 ]
 
 const HeroHeader = () => {

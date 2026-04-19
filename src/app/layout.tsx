@@ -14,6 +14,7 @@ export const metadata: Metadata = {
 };
 
 import { ThemeProvider } from "@/components/theme-provider";
+import { Footer } from "@/components/footer";
 
 export default function RootLayout({
   children,
@@ -29,7 +30,10 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col relative">
         <ThemeProvider>
           <div className="fixed inset-0 -z-50 size-full bg-dot-grid pointer-events-none" />
-          {children}
+          <div className="flex-1">
+            {children}
+          </div>
+          <Footer />
         </ThemeProvider>
       </body>
     </html>
