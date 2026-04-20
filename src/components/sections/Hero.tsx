@@ -40,13 +40,11 @@ export const Hero = () => {
             </p>
 
             <div className="mt-8 flex flex-col items-center justify-center gap-2 md:flex-row">
-              <div className="bg-foreground/10 rounded-[14px] border p-0.5">
-                <Button asChild size="lg" className="rounded-xl px-5 text-base">
-                  <Link href="/features">
-                    <span className="text-nowrap">Start Building</span>
-                  </Link>
-                </Button>
-              </div>
+              <Button asChild size="lg" className="rounded-xl px-5 text-base">
+                <Link href="/features">
+                  <span className="text-nowrap">Start Building</span>
+                </Link>
+              </Button>
               <Button
                 asChild
                 size="lg"
