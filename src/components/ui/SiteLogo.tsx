@@ -26,10 +26,10 @@ export const Logo = ({ className }: { className?: string }) => {
                     x2="10"
                     y2="20"
                     gradientUnits="userSpaceOnUse">
-                    <stop stopColor="#9B99FE" />
+                    <stop stopColor="#FF6B00" />
                     <stop
                         offset="1"
-                        stopColor="#2BC8B7"
+                        stopColor="#FFD600"
                     />
                 </linearGradient>
             </defs>
