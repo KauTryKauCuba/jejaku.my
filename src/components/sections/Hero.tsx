@@ -6,7 +6,7 @@ import Image from 'next/image'
 
 export const Hero = () => {
   return (
-    <section>
+    <section className="pb-24 md:pb-32">
       <div className="relative pt-20 md:pt-24">
         <div className="mx-auto max-w-7xl px-6">
           <div className="text-center sm:mx-auto lg:mr-auto lg:mt-0">

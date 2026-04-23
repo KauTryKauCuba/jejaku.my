@@ -14,15 +14,6 @@ const ThemeContext = React.createContext<ThemeContextType | undefined>(undefined
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setThemeState] = React.useState<Theme>('system');
 
-  React.useEffect(() => {
-    const root = window.document.documentElement;
-    const storedTheme = localStorage.getItem('theme') as Theme | null;
-    const initialTheme = storedTheme || 'system';
-    
-    setThemeState(initialTheme);
-    applyTheme(initialTheme);
-  }, []);
-
   const applyTheme = (newTheme: Theme) => {
     const root = window.document.documentElement;
     const isDark = 
@@ -35,6 +26,14 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       root.classList.remove('dark');
     }
   };
+
+  React.useEffect(() => {
+    const storedTheme = localStorage.getItem('theme') as Theme | null;
+    const initialTheme = storedTheme || 'system';
+    
+    setThemeState(initialTheme);
+    applyTheme(initialTheme);
+  }, []);
 
   const setTheme = (newTheme: Theme) => {
     setThemeState(newTheme);

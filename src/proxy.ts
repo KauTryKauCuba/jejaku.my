@@ -1,6 +1,6 @@
-import { NextResponse, type NextRequest } from 'next/server'
+import { NextResponse } from 'next/server'
 
-export function middleware(request: NextRequest) {
+export function proxy() {
   // Add authentication logic here
   // For now, it's a pass-through shell
   return NextResponse.next()

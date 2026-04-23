@@ -28,7 +28,7 @@ export function TextEffect({
     segments = children.split('');
   }
 
-  const Tag = as as any;
+  const Tag: React.ElementType = as;
 
   return (
     <Tag className={cn('whitespace-pre-wrap', className)}>
