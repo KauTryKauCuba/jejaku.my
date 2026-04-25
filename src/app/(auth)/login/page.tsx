@@ -28,7 +28,7 @@ export default function LoginPage() {
 
       <div className="mb-6">
         <Link href="/">
-          <Logo className="h-8" />
+          <Logo className="h-5" />
         </Link>
       </div>
 
