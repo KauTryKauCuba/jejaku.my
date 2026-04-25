@@ -32,7 +32,7 @@ export default async function DashboardLayout({
         email: user.email,
         organizationName: user.organizationName
       }} />
-      <main className="flex-1 overflow-y-auto">
+      <main className="flex-1 overflow-y-auto bg-background">
         {children}
       </main>
     </div>

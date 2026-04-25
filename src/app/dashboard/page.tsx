@@ -29,15 +29,15 @@ export default async function DashboardPage() {
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="p-4 rounded-xl border bg-card/50 hover:shadow-sm transition-shadow">
+        <div className="p-4 rounded-xl border bg-card/50">
           <p className="text-xs font-semibold text-muted-foreground mb-0.5 uppercase tracking-wider">Active Projects</p>
           <p className="text-2xl font-bold">0</p>
         </div>
-        <div className="p-4 rounded-xl border bg-card/50 hover:shadow-sm transition-shadow">
+        <div className="p-4 rounded-xl border bg-card/50">
           <p className="text-xs font-semibold text-muted-foreground mb-0.5 uppercase tracking-wider">Team Members</p>
           <p className="text-2xl font-bold">1</p>
         </div>
-        <div className="p-4 rounded-xl border bg-card/50 hover:shadow-sm transition-shadow">
+        <div className="p-4 rounded-xl border bg-card/50">
           <p className="text-xs font-semibold text-muted-foreground mb-0.5 uppercase tracking-wider">Tasks Pending</p>
           <p className="text-2xl font-bold">0</p>
         </div>
