@@ -5,7 +5,13 @@ import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import { completeOnboarding } from '@/app/actions/auth';
-import { Select } from '@/components/ui/Select';
+import { 
+  Select, 
+  SelectContent, 
+  SelectItem, 
+  SelectTrigger, 
+  SelectValue 
+} from '@/components/ui/Select';
 import { Building2, UserCircle, Briefcase, Loader2 } from 'lucide-react';
 
 export function OnboardingForm() {
@@ -33,21 +39,23 @@ export function OnboardingForm() {
       <div className="space-y-2">
         <Label htmlFor="role">Your Role</Label>
         <div className="relative">
-          <UserCircle className="absolute left-3 top-3 size-4 text-muted-foreground z-10" />
+          <UserCircle className="absolute left-3 top-3 size-4 text-muted-foreground z-10 pointer-events-none" />
           <Select 
-            id="role" 
             name="role"
             required 
             defaultValue=""
-            className="pl-10 !transition-none" 
             disabled={isPending}
           >
-            <option value="" disabled>Select your role</option>
-            <option value="CEO">CEO / Founder</option>
-            <option value="Manager">Manager</option>
-            <option value="Operations">Operations</option>
-            <option value="Owner">Business Owner</option>
-            <option value="Other">Other</option>
+            <SelectTrigger className="pl-10 !transition-none">
+              <SelectValue placeholder="Select your role" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="CEO">CEO / Founder</SelectItem>
+              <SelectItem value="Manager">Manager</SelectItem>
+              <SelectItem value="Operations">Operations</SelectItem>
+              <SelectItem value="Owner">Business Owner</SelectItem>
+              <SelectItem value="Other">Other</SelectItem>
+            </SelectContent>
           </Select>
         </div>
       </div>
@@ -55,15 +63,29 @@ export function OnboardingForm() {
       <div className="space-y-2">
         <Label htmlFor="industry">Industry</Label>
         <div className="relative">
-          <Briefcase className="absolute left-3 top-3 size-4 text-muted-foreground" />
-          <Input 
-            id="industry" 
+          <Briefcase className="absolute left-3 top-3 size-4 text-muted-foreground z-10 pointer-events-none" />
+          <Select 
             name="industry"
-            placeholder="Retail, Tech, Hospitality..." 
             required 
-            className="pl-10 !transition-none" 
+            defaultValue=""
             disabled={isPending}
-          />
+          >
+            <SelectTrigger className="pl-10 !transition-none">
+              <SelectValue placeholder="Select industry" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="Retail">Retail</SelectItem>
+              <SelectItem value="Technology">Technology</SelectItem>
+              <SelectItem value="Hospitality">Hospitality</SelectItem>
+              <SelectItem value="Healthcare">Healthcare</SelectItem>
+              <SelectItem value="Education">Education</SelectItem>
+              <SelectItem value="Real Estate">Real Estate</SelectItem>
+              <SelectItem value="Logistics">Logistics & Transport</SelectItem>
+              <SelectItem value="Manufacturing">Manufacturing</SelectItem>
+              <SelectItem value="Services">Professional Services</SelectItem>
+              <SelectItem value="Other">Other</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
       </div>
 
