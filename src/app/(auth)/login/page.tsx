@@ -26,7 +26,7 @@ export default function LoginPage() {
         Back to home
       </Link>
 
-      <div className="mb-6">
+      <div className="mb-4">
         <Link href="/">
           <Logo className="h-5" />
         </Link>
@@ -42,7 +42,7 @@ export default function LoginPage() {
             { id: 'register', label: 'Register', href: '/register', active: false },
           ]} 
         />
-        <form className="space-y-4">
+        <form className="space-y-3">
           <div className="space-y-2">
             <Label htmlFor="email">Email address</Label>
             <Input 

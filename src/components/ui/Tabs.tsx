@@ -15,7 +15,7 @@ interface TabsProps {
 
 export function Tabs({ tabs, className }: TabsProps) {
   return (
-    <div className={cn("flex p-1 bg-muted/50 rounded-xl mb-6", className)}>
+    <div className={cn("flex p-1 bg-muted/50 rounded-xl mb-4", className)}>
       {tabs.map((tab) => (
         <a
           key={tab.id}

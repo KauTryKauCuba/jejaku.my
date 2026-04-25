@@ -26,7 +26,7 @@ export default function RegisterPage() {
         Back to home
       </Link>
 
-      <div className="mb-6">
+      <div className="mb-4">
         <Link href="/">
           <Logo className="h-5" />
         </Link>
@@ -42,7 +42,7 @@ export default function RegisterPage() {
             { id: 'register', label: 'Register', href: '/register', active: true },
           ]} 
         />
-        <form className="space-y-4">
+        <form className="space-y-3">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="firstName">First Name</Label>

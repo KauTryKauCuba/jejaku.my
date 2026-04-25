@@ -12,11 +12,11 @@ export function AuthCard({ children, className, title, description }: AuthCardPr
   return (
     <div
       className={cn(
-        "w-full max-w-[400px] mx-auto p-6 rounded-2xl border bg-background/50 backdrop-blur-xl relative overflow-hidden",
+        "w-full max-w-[380px] mx-auto p-5 rounded-2xl border bg-background/50 backdrop-blur-xl relative overflow-hidden",
         className
       )}
     >
-      <div className="text-center mb-6">
+      <div className="text-center mb-4">
         <h1 className="text-2xl font-bold tracking-tight text-foreground">{title}</h1>
         {description && (
           <p className="mt-1.5 text-sm text-muted-foreground">{description}</p>
