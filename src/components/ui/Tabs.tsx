@@ -1,6 +1,4 @@
-"use client"
-
-import * as React from "react"
+import Link from "next/link"
 import { cn } from "@/lib/utils"
 
 interface TabsProps {
@@ -17,7 +15,7 @@ export function Tabs({ tabs, className }: TabsProps) {
   return (
     <div className={cn("flex p-1 bg-muted/50 rounded-xl mb-4", className)}>
       {tabs.map((tab) => (
-        <a
+        <Link
           key={tab.id}
           href={tab.href}
           className={cn(
@@ -28,7 +26,7 @@ export function Tabs({ tabs, className }: TabsProps) {
           )}
         >
           {tab.label}
-        </a>
+        </Link>
       ))}
     </div>
   )
