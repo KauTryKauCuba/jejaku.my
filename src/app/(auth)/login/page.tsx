@@ -73,7 +73,7 @@ export default function LoginPage() {
             />
           </div>
 
-          <Button className="w-full h-11 rounded-xl text-base bg-brand-gradient hover:opacity-90 border-0 !transition-none">
+          <Button className="w-full h-11 rounded-xl text-base bg-primary text-primary-foreground hover:opacity-90 !transition-none">
             Sign In
           </Button>
 

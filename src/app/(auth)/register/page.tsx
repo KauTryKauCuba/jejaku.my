@@ -68,7 +68,7 @@ export default function RegisterPage() {
             </p>
           </div>
 
-          <Button className="w-full h-11 rounded-xl text-base bg-brand-gradient hover:opacity-90 border-0 mt-2 !transition-none">
+          <Button className="w-full h-11 rounded-xl text-base bg-primary text-primary-foreground hover:opacity-90 mt-2 !transition-none">
             Get Started
           </Button>
 
