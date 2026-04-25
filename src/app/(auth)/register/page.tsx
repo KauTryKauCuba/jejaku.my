@@ -2,10 +2,8 @@ import React from 'react'
 import Link from 'next/link'
 import { Logo } from '@/components/ui/SiteLogo'
 import { AuthCard } from '@/components/ui/AuthCard'
-import { Button } from '@/components/ui/Button'
-import { Input } from '@/components/ui/Input'
-import { Label } from '@/components/ui/Label'
-import { ArrowLeft, Code2, Mail, ShieldCheck } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
+import { RegisterForm } from '@/components/auth/RegisterForm'
 import { Tabs } from '@/components/ui/Tabs'
 import { Metadata } from 'next'
 
@@ -42,58 +40,7 @@ export default function RegisterPage() {
             { id: 'register', label: 'Register', href: '/register', active: true },
           ]} 
         />
-        <form className="space-y-3">
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="firstName">First Name</Label>
-              <Input id="firstName" placeholder="John" required className="!transition-none" />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="lastName">Last Name</Label>
-              <Input id="lastName" placeholder="Doe" required className="!transition-none" />
-            </div>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="email">Email address</Label>
-            <Input id="email" type="email" placeholder="name@example.com" required className="!transition-none" />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
-            <Input id="password" type="password" placeholder="••••••••" required className="!transition-none" />
-            <p className="text-[10px] text-muted-foreground flex items-center gap-1">
-              <ShieldCheck className="size-3 text-primary" />
-              Must be at least 8 characters with a number
-            </p>
-          </div>
-
-          <Button className="w-full h-11 rounded-xl text-base bg-primary text-primary-foreground hover:opacity-90 mt-2 !transition-none">
-            Get Started
-          </Button>
-
-          <div className="relative py-2">
-            <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t" />
-            </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-background px-2 text-muted-foreground">
-                Or sign up with
-              </span>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <Button variant="outline" className="rounded-xl h-11 !transition-none">
-              <Code2 className="mr-2 size-4" />
-              GitHub
-            </Button>
-            <Button variant="outline" className="rounded-xl h-11 !transition-none">
-              <Mail className="mr-2 size-4" />
-              Google
-            </Button>
-          </div>
-        </form>
+        <RegisterForm />
         
         <p className="mt-6 text-center text-[11px] text-muted-foreground leading-relaxed">
           By clicking &quot;Get Started&quot;, you agree to our{' '}

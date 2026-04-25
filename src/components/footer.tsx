@@ -121,10 +121,25 @@ export function Footer() {
             </div>
           </div>
         </div>
-        <div className="mt-12 border-t pt-8 sm:mt-16 lg:mt-20">
+        <div className="mt-12 border-t pt-8 sm:mt-16 lg:mt-20 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           <p className="text-xs leading-5 text-muted-foreground">
             &copy; {new Date().getFullYear()} Jejaku.my. All rights reserved.
           </p>
+
+          <div className="flex flex-wrap gap-6">
+            <div className="flex items-center gap-2 text-[10px] uppercase tracking-wider font-medium text-muted-foreground">
+              <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
+              Front end: <span className="text-foreground">Operational</span>
+            </div>
+            <div className="flex items-center gap-2 text-[10px] uppercase tracking-wider font-medium text-muted-foreground">
+              <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
+              Back end: <span className="text-foreground">Operational</span>
+            </div>
+            <div className="flex items-center gap-2 text-[10px] uppercase tracking-wider font-medium text-muted-foreground">
+              <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
+              DB: <span className="text-foreground">Operational</span>
+            </div>
+          </div>
         </div>
       </div>
     </footer>
