@@ -7,6 +7,13 @@ import { Input } from '@/components/ui/Input'
 import { Label } from '@/components/ui/Label'
 import { ArrowLeft, Code2, Mail } from 'lucide-react'
 
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Sign In',
+  description: 'Sign in to your account to manage your projects.',
+}
+
 export default function LoginPage() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-6 relative">

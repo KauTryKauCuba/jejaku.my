@@ -7,6 +7,13 @@ import { Input } from '@/components/ui/Input'
 import { Label } from '@/components/ui/Label'
 import { ArrowLeft, Code2, Mail, ShieldCheck } from 'lucide-react'
 
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Create Account',
+  description: 'Create a new account to get started with Jejaku.',
+}
+
 export default function RegisterPage() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-6 relative">

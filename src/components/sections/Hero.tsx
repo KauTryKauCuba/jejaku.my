@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import Image from 'next/image'
+import { siteConfig } from '@/lib/site-config'
 
 export const Hero = () => {
   return (
@@ -35,8 +36,7 @@ export const Hero = () => {
               Modern Solutions for Customer Engagement
             </h1>
             <p className="mx-auto mt-6 max-w-2xl text-balance text-lg">
-              Highly customizable components for building modern websites and
-              applications that look and feel the way you mean it.
+              {siteConfig.description}
             </p>
 
             <div className="mt-8 flex flex-col items-center justify-center gap-2 md:flex-row">
