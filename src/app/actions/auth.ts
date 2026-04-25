@@ -7,46 +7,43 @@ import { z } from 'zod';
 import { redirect } from 'next/navigation';
 import { cookies } from 'next/headers';
 import { eq } from 'drizzle-orm';
+import { createSession, getSession, deleteSession } from '@/lib/session';
+
 
 const RegisterSchema = z.object({
-  firstName: z.string().min(2, 'First name is too short'),
-  lastName: z.string().min(2, 'Last name is too short'),
+  name: z.string().min(2, 'Name is too short'),
   email: z.string().email('Invalid email address'),
-  password: z.string().min(8, 'Password must be at least 8 characters'),
+  password: z
+    .string()
+    .min(8, 'Password must be at least 8 characters')
+    .regex(/[0-9]/, 'Password must contain at least one number')
+    .regex(/[A-Z]/, 'Password must contain at least one uppercase letter'),
 });
 
 export async function registerUser(formData: FormData) {
   const rawData = Object.fromEntries(formData.entries());
-  
   const validated = RegisterSchema.safeParse(rawData);
-  
+
   if (!validated.success) {
     return { error: validated.error.issues[0].message };
   }
 
-  const { firstName, lastName, email, password } = validated.data;
-
+  const { name, email, password } = validated.data;
+  
   try {
     const hashedPassword = await hash(password, 10);
 
     const [newUser] = await db.insert(users).values({
-      firstName,
-      lastName,
+      name,
       email,
       password: hashedPassword,
     }).returning({ id: users.id });
 
-    // Set a session cookie
-    const cookieStore = await cookies();
-    cookieStore.set('user_id', newUser.id, { 
-      httpOnly: true, 
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      path: '/',
-    });
+    // Create a signed session
+    await createSession(newUser.id);
   } catch (error: any) {
-    console.error('Registration Error:', error);
-    if (error.code === '23505') {
+    const errorCode = error.code || error.cause?.code;
+    if (errorCode === '23505') {
       return { error: 'Email already exists' };
     }
     return { error: `Database Error: ${error.message || 'Unknown error'}` };
@@ -85,14 +82,8 @@ export async function loginUser(formData: FormData) {
       return { error: 'Invalid email or password' };
     }
 
-    // Set a session cookie
-    const cookieStore = await cookies();
-    cookieStore.set('user_id', user.id, { 
-      httpOnly: true, 
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      path: '/',
-    });
+    // Create a signed session
+    await createSession(user.id);
 
     if (!user.isOnboarded) {
       redirect('/onboarding');
@@ -113,8 +104,8 @@ const OnboardingSchema = z.object({
 });
 
 export async function completeOnboarding(formData: FormData) {
-  const cookieStore = await cookies();
-  const userId = cookieStore.get('user_id')?.value;
+  const session = await getSession();
+  const userId = session?.userId;
 
   if (!userId) {
     redirect('/register');
@@ -144,4 +135,9 @@ export async function completeOnboarding(formData: FormData) {
   }
 
   redirect('/dashboard');
+}
+
+export async function logoutUser() {
+  await deleteSession();
+  redirect('/login');
 }

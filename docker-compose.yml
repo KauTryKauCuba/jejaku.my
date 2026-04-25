@@ -9,7 +9,7 @@ services:
     restart: always
     environment:
       - NODE_ENV=production
-      - DATABASE_URL=postgres://postgres:password@db:5432/jejaku_db
+      - DATABASE_URL=postgres://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-password}@db:5432/${POSTGRES_DB:-jejaku_db}
     depends_on:
       db:
         condition: service_healthy
@@ -21,7 +21,7 @@ services:
       target: builder
     command: npx drizzle-kit push
     environment:
-      - DATABASE_URL=postgres://postgres:password@db:5432/jejaku_db
+      - DATABASE_URL=postgres://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-password}@db:5432/${POSTGRES_DB:-jejaku_db}
     depends_on:
       db:
         condition: service_healthy
@@ -31,9 +31,9 @@ services:
     container_name: jejaku-db
     restart: always
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: jejaku_db
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
+      POSTGRES_DB: ${POSTGRES_DB:-jejaku_db}
     ports:
       - "5433:5432"
     healthcheck:

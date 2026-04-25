@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import { completeOnboarding } from '@/app/actions/auth';
+import { Select } from '@/components/ui/Select';
 import { Building2, UserCircle, Briefcase, Loader2 } from 'lucide-react';
 
 export function OnboardingForm() {
@@ -32,15 +33,22 @@ export function OnboardingForm() {
       <div className="space-y-2">
         <Label htmlFor="role">Your Role</Label>
         <div className="relative">
-          <UserCircle className="absolute left-3 top-3 size-4 text-muted-foreground" />
-          <Input 
+          <UserCircle className="absolute left-3 top-3 size-4 text-muted-foreground z-10" />
+          <Select 
             id="role" 
             name="role"
-            placeholder="CEO / Manager / Owner" 
             required 
+            defaultValue=""
             className="pl-10 !transition-none" 
             disabled={isPending}
-          />
+          >
+            <option value="" disabled>Select your role</option>
+            <option value="CEO">CEO / Founder</option>
+            <option value="Manager">Manager</option>
+            <option value="Operations">Operations</option>
+            <option value="Owner">Business Owner</option>
+            <option value="Other">Other</option>
+          </Select>
         </div>
       </div>
 

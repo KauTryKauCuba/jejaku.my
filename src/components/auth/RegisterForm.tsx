@@ -20,29 +20,16 @@ export function RegisterForm() {
         </div>
       )}
       
-      <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="firstName">First Name</Label>
-          <Input 
-            id="firstName" 
-            name="firstName"
-            placeholder="John" 
-            required 
-            className="!transition-none" 
-            disabled={isPending}
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="lastName">Last Name</Label>
-          <Input 
-            id="lastName" 
-            name="lastName"
-            placeholder="Doe" 
-            required 
-            className="!transition-none" 
-            disabled={isPending}
-          />
-        </div>
+      <div className="space-y-2">
+        <Label htmlFor="name">Full Name</Label>
+        <Input 
+          id="name" 
+          name="name"
+          placeholder="John Doe" 
+          required 
+          className="!transition-none" 
+          disabled={isPending}
+        />
       </div>
 
       <div className="space-y-2">
