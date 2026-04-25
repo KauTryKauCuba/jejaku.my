@@ -7,13 +7,9 @@ import { Button } from '@/components/ui/Button'
 import { cn } from '@/lib/utils'
 import { ModeToggle } from '@/components/mode-toggle'
 import { Logo } from '@/components/ui/SiteLogo'
+import { siteConfig } from '@/lib/site-config'
 
-const menuItems = [
-    { name: 'Features', href: '/features' },
-    { name: 'Solution', href: '/solutions' },
-    { name: 'Pricing', href: '/pricing' },
-    { name: 'About', href: '/about' },
-]
+const menuItems = siteConfig.mainNav
 
 export const Header = () => {
     const [menuState, setMenuState] = React.useState(false)
@@ -85,7 +81,7 @@ export const Header = () => {
                                     variant="outline"
                                     size="sm"
                                     className={cn(isScrolled && 'lg:hidden')}>
-                                    <Link href="#">
+                                    <Link href="/login">
                                         <span>Login</span>
                                     </Link>
                                 </Button>
@@ -93,7 +89,7 @@ export const Header = () => {
                                     asChild
                                     size="sm"
                                     className={cn(isScrolled && 'lg:hidden')}>
-                                    <Link href="#">
+                                    <Link href="/register">
                                         <span>Sign Up</span>
                                     </Link>
                                 </Button>
@@ -101,7 +97,7 @@ export const Header = () => {
                                     asChild
                                     size="sm"
                                     className={cn(isScrolled ? 'lg:inline-flex' : 'hidden')}>
-                                    <Link href="#">
+                                    <Link href="/register">
                                         <span>Get Started</span>
                                     </Link>
                                 </Button>

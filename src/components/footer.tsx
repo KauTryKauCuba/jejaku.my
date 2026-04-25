@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { Logo } from '@/components/ui/SiteLogo'
 import { Code2, MessageCircle, Globe, Mail } from 'lucide-react'
+import { siteConfig } from '@/lib/site-config'
 
 const footerLinks = [
   {
@@ -44,11 +45,11 @@ export function Footer() {
               Modern solutions for customer engagement. Highly customizable components for building modern websites.
             </p>
             <div className="flex space-x-6">
-              <Link href="#" className="text-muted-foreground hover:text-foreground">
+              <Link href={siteConfig.links.twitter} className="text-muted-foreground hover:text-foreground">
                 <span className="sr-only">Twitter</span>
                 <MessageCircle className="h-5 w-5" />
               </Link>
-              <Link href="#" className="text-muted-foreground hover:text-foreground">
+              <Link href={siteConfig.links.github} className="text-muted-foreground hover:text-foreground">
                 <span className="sr-only">GitHub</span>
                 <Code2 className="h-5 w-5" />
               </Link>

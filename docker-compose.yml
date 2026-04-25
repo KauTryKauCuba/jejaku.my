@@ -2,7 +2,7 @@ services:
   app:
     container_name: nextjs-app
     build:
-      context: https://github.com/KauTryKauCuba/0001.git#main
+      context: https://github.com/KauTryKauCuba/jejaku.my.git#main
       dockerfile: Dockerfile
       # This line fixes the DNS/internet issue during build
       network: host

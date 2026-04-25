@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { siteConfig } from "@/lib/site-config";
+import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 
 const inter = Inter({
@@ -9,12 +11,13 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Jejaku - Modern Solutions for Customer Engagement",
-  description: "Highly customizable components for building modern websites and applications that look and feel the way you mean it.",
+  title: {
+    default: siteConfig.name,
+    template: `%s | ${siteConfig.name}`,
+  },
+  description: siteConfig.description,
+  metadataBase: new URL(siteConfig.url),
 };
-
-import { ThemeProvider } from "@/components/theme-provider";
-import { Footer } from "@/components/footer";
 
 export default function RootLayout({
   children,
@@ -30,10 +33,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col relative">
         <ThemeProvider>
           <div className="fixed inset-0 -z-50 size-full bg-dot-grid pointer-events-none" />
-          <div className="flex-1">
-            {children}
-          </div>
-          <Footer />
+          {children}
         </ThemeProvider>
       </body>
     </html>
