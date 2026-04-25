@@ -4,14 +4,27 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      network: host
     ports:
       - "3000:3000"
     restart: always
     environment:
       - NODE_ENV=production
+      - DATABASE_URL=postgres://postgres:password@db:5432/jejaku_db
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+
+  db-migrate:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: builder
+    command: npx drizzle-kit push
+    environment:
+      - DATABASE_URL=postgres://postgres:password@db:5432/jejaku_db
+    depends_on:
+      db:
+        condition: service_healthy
 
   db:
     image: postgres:15
@@ -23,6 +36,11 @@ services:
       POSTGRES_DB: jejaku_db
     ports:
       - "5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d jejaku_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
