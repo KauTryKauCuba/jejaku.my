@@ -42,7 +42,7 @@ export function Footer() {
               <Logo />
             </Link>
             <p className="text-sm leading-6 text-muted-foreground max-w-xs">
-              Modern solutions for customer engagement. Highly customizable components for building modern websites.
+              {siteConfig.description}
             </p>
             <div className="flex space-x-6">
               <Link href={siteConfig.links.twitter} className="text-muted-foreground hover:text-foreground">

@@ -3,7 +3,7 @@ export const siteConfig = {
   url: "https://jejaku.my",
   ogImage: "https://jejaku.my/og.jpg",
   description:
-    "Highly customizable components for building modern websites and applications that look and feel the way you mean it.",
+    "Jejaku.my gives your business a real-time view of every item you own across every location so you never lose stock, miss a reorder, or waste time counting manually again.",
   links: {
     twitter: "https://twitter.com/jejaku",
     github: "https://github.com/KauTryKauCuba/jejaku.my",
