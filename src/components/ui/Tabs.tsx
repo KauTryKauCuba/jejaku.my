@@ -19,7 +19,7 @@ export function Tabs({ tabs, className }: TabsProps) {
           key={tab.id}
           href={tab.href}
           className={cn(
-            "flex-1 text-center py-2 text-sm font-medium rounded-lg transition-all",
+            "flex-1 text-center py-2 text-sm font-medium rounded-lg",
             tab.active 
               ? "bg-background text-foreground shadow-sm" 
               : "text-muted-foreground hover:text-foreground"

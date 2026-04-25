@@ -13,15 +13,15 @@ export const Hero = () => {
           <div className="text-center sm:mx-auto lg:mr-auto lg:mt-0">
             <Link
               href="/features"
-              className="hover:bg-background bg-muted group mx-auto flex w-fit items-center gap-4 rounded-full border p-1 pl-4 transition-all duration-300 dark:border-white/10"
+              className="hover:bg-background bg-muted group mx-auto flex w-fit items-center gap-4 rounded-full border p-1 pl-4 dark:border-white/10"
             >
               <span className="text-foreground text-sm font-medium">
                 Introducing Support for AI Models
               </span>
               <span className="block h-4 w-0.5 bg-border"></span>
 
-              <div className="bg-brand-gradient group-hover:opacity-80 size-6 overflow-hidden rounded-full duration-500">
-                <div className="flex w-12 -translate-x-1/2 duration-500 ease-in-out group-hover:translate-x-0">
+              <div className="bg-brand-gradient group-hover:opacity-80 size-6 overflow-hidden rounded-full">
+                <div className="flex w-12 -translate-x-1/2 group-hover:translate-x-0">
                   <span className="flex size-6">
                     <ArrowRight className="m-auto size-3 text-white" />
                   </span>
