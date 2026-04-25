@@ -1,9 +1,3 @@
-## ubuntu server (home) i7 8th gen, 6c 12t, 16gb ram, 128gb nvme
-## tailscale
-## cloudflare tunnel
-## docker
-## domain (dns) cloudflare -- cloudflare tunnel (auto)
-
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
