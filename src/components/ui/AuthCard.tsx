@@ -1,7 +1,4 @@
-"use client"
-
 import * as React from "react"
-import { motion } from "framer-motion"
 import { cn } from "@/lib/utils"
 
 interface AuthCardProps {
@@ -13,10 +10,7 @@ interface AuthCardProps {
 
 export function AuthCard({ children, className, title, description }: AuthCardProps) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, ease: "easeOut" }}
+    <div
       className={cn(
         "w-full max-w-[400px] mx-auto p-6 rounded-2xl border bg-background/50 backdrop-blur-xl relative overflow-hidden",
         className
@@ -30,6 +24,6 @@ export function AuthCard({ children, className, title, description }: AuthCardPr
       </div>
 
       {children}
-    </motion.div>
+    </div>
   )
 }

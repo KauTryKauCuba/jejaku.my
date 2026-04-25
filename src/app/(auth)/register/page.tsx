@@ -13,9 +13,9 @@ export default function RegisterPage() {
       {/* Back to Home */}
       <Link 
         href="/" 
-        className="absolute top-8 left-8 flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors group"
+        className="absolute top-8 left-8 flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground group"
       >
-        <ArrowLeft className="size-4 transition-transform group-hover:-translate-x-1" />
+        <ArrowLeft className="size-4" />
         Back to home
       </Link>
 
