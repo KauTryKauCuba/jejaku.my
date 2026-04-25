@@ -37,6 +37,7 @@ export default function LoginPage() {
               type="email" 
               placeholder="name@example.com" 
               required 
+              className="!transition-none"
             />
           </div>
 
@@ -55,10 +56,11 @@ export default function LoginPage() {
               type="password" 
               placeholder="••••••••" 
               required 
+              className="!transition-none"
             />
           </div>
 
-          <Button className="w-full h-11 rounded-xl text-base bg-brand-gradient hover:opacity-90 border-0">
+          <Button className="w-full h-11 rounded-xl text-base bg-brand-gradient hover:opacity-90 border-0 !transition-none">
             Sign In
           </Button>
 
@@ -74,11 +76,11 @@ export default function LoginPage() {
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <Button variant="outline" className="rounded-xl h-11">
+            <Button variant="outline" className="rounded-xl h-11 !transition-none">
               <Code2 className="mr-2 size-4" />
               GitHub
             </Button>
-            <Button variant="outline" className="rounded-xl h-11">
+            <Button variant="outline" className="rounded-xl h-11 !transition-none">
               <Mail className="mr-2 size-4" />
               Google
             </Button>

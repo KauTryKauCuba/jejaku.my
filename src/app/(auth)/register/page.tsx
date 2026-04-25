@@ -33,29 +33,29 @@ export default function RegisterPage() {
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="firstName">First Name</Label>
-              <Input id="firstName" placeholder="John" required />
+              <Input id="firstName" placeholder="John" required className="!transition-none" />
             </div>
             <div className="space-y-2">
               <Label htmlFor="lastName">Last Name</Label>
-              <Input id="lastName" placeholder="Doe" required />
+              <Input id="lastName" placeholder="Doe" required className="!transition-none" />
             </div>
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="email">Email address</Label>
-            <Input id="email" type="email" placeholder="name@example.com" required />
+            <Input id="email" type="email" placeholder="name@example.com" required className="!transition-none" />
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="password">Password</Label>
-            <Input id="password" type="password" placeholder="••••••••" required />
+            <Input id="password" type="password" placeholder="••••••••" required className="!transition-none" />
             <p className="text-[10px] text-muted-foreground flex items-center gap-1">
               <ShieldCheck className="size-3 text-primary" />
               Must be at least 8 characters with a number
             </p>
           </div>
 
-          <Button className="w-full h-11 rounded-xl text-base bg-brand-gradient hover:opacity-90 border-0 mt-2">
+          <Button className="w-full h-11 rounded-xl text-base bg-brand-gradient hover:opacity-90 border-0 mt-2 !transition-none">
             Get Started
           </Button>
 
@@ -71,11 +71,11 @@ export default function RegisterPage() {
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <Button variant="outline" className="rounded-xl h-11">
+            <Button variant="outline" className="rounded-xl h-11 !transition-none">
               <Code2 className="mr-2 size-4" />
               GitHub
             </Button>
-            <Button variant="outline" className="rounded-xl h-11">
+            <Button variant="outline" className="rounded-xl h-11 !transition-none">
               <Mail className="mr-2 size-4" />
               Google
             </Button>
