@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { Label } from '@/components/ui/Label'
 import { ArrowLeft, Code2, Mail } from 'lucide-react'
-
+import { Tabs } from '@/components/ui/Tabs'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -36,6 +36,12 @@ export default function LoginPage() {
         title="Welcome Back" 
         description="Enter your credentials to access your account"
       >
+        <Tabs 
+          tabs={[
+            { id: 'login', label: 'Login', href: '/login', active: true },
+            { id: 'register', label: 'Register', href: '/register', active: false },
+          ]} 
+        />
         <form className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="email">Email address</Label>
@@ -93,13 +99,6 @@ export default function LoginPage() {
             </Button>
           </div>
         </form>
-
-        <div className="mt-8 text-center text-sm text-muted-foreground">
-          Don&apos;t have an account?{' '}
-          <Link href="/register" className="text-primary font-semibold hover:underline">
-            Create an account
-          </Link>
-        </div>
       </AuthCard>
     </div>
   )

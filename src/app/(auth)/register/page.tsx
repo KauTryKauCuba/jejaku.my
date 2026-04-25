@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { Label } from '@/components/ui/Label'
 import { ArrowLeft, Code2, Mail, ShieldCheck } from 'lucide-react'
-
+import { Tabs } from '@/components/ui/Tabs'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -36,6 +36,12 @@ export default function RegisterPage() {
         title="Create Account" 
         description="Join thousands of teams building better customer engagement"
       >
+        <Tabs 
+          tabs={[
+            { id: 'login', label: 'Login', href: '/login', active: false },
+            { id: 'register', label: 'Register', href: '/register', active: true },
+          ]} 
+        />
         <form className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
@@ -88,13 +94,6 @@ export default function RegisterPage() {
             </Button>
           </div>
         </form>
-
-        <div className="mt-8 text-center text-sm text-muted-foreground">
-          Already have an account?{' '}
-          <Link href="/login" className="text-primary font-semibold hover:underline">
-            Sign in
-          </Link>
-        </div>
         
         <p className="mt-6 text-center text-[11px] text-muted-foreground leading-relaxed">
           By clicking &quot;Get Started&quot;, you agree to our{' '}
