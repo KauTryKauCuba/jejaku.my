@@ -136,23 +136,6 @@ export function DashboardSidebar({ user }: DashboardSidebarProps) {
           )}
         </button>
 
-        <div className="pt-1">
-          <div className={cn(
-            "flex items-center rounded-lg bg-accent/30 border border-border/30 overflow-hidden",
-            isCollapsed ? "p-1.5 justify-center" : "px-2.5 py-1.5 gap-2.5"
-          )}>
-            <div className="size-7 rounded-full bg-muted flex items-center justify-center text-muted-foreground font-bold text-[10px] shrink-0">
-              {user.name[0]}
-            </div>
-            {!isCollapsed && (
-              <div className="flex-1 min-w-0 text-left">
-                <p className="text-[11px] font-semibold truncate leading-none mb-0.5">{user.name}</p>
-                <p className="text-[9px] text-muted-foreground truncate leading-none">{user.email}</p>
-              </div>
-            )}
-          </div>
-        </div>
-
         <form action={async () => {
           await logoutUser();
         }} className="mt-1">
