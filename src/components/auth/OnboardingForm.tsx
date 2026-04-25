@@ -12,16 +12,50 @@ import {
   SelectTrigger, 
   SelectValue 
 } from '@/components/ui/Select';
-import { Building2, UserCircle, Briefcase, Loader2 } from 'lucide-react';
+import { Building2, UserCircle, Briefcase, Loader2, Mail } from 'lucide-react';
 
-export function OnboardingForm() {
+interface OnboardingFormProps {
+  user: {
+    name: string;
+    email: string;
+  };
+}
+
+export function OnboardingForm({ user }: OnboardingFormProps) {
   const [state, action, isPending] = useActionState(async (prevState: any, formData: FormData) => {
     return await completeOnboarding(formData);
   }, null);
 
   return (
     <form action={action} className="space-y-4">
-      <div className="space-y-2">
+      <div className="space-y-3 pb-6 border-b">
+        <div className="space-y-2">
+          <Label className="text-xs text-muted-foreground ml-1">Signed in as</Label>
+          <div className="relative opacity-60">
+            <UserCircle className="absolute left-3 top-3 size-4 text-muted-foreground" />
+            <Input 
+              value={user.name} 
+              readOnly 
+              disabled
+              className="pl-10 bg-muted/30 border-transparent text-sm" 
+            />
+          </div>
+        </div>
+        <div className="space-y-2">
+          <Label className="text-xs text-muted-foreground ml-1">Email address</Label>
+          <div className="relative opacity-60">
+            <Mail className="absolute left-3 top-3 size-4 text-muted-foreground" />
+            <Input 
+              value={user.email} 
+              readOnly 
+              disabled
+              className="pl-10 bg-muted/30 border-transparent text-sm" 
+            />
+          </div>
+        </div>
+      </div>
+
+      <div className="space-y-2 pt-2">
         <Label htmlFor="orgName">Organization Name</Label>
         <div className="relative">
           <Building2 className="absolute left-3 top-3 size-4 text-muted-foreground" />

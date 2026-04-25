@@ -2,6 +2,11 @@ import React from 'react'
 import { Logo } from '@/components/ui/SiteLogo'
 import { AuthCard } from '@/components/ui/AuthCard'
 import { OnboardingForm } from '@/components/auth/OnboardingForm'
+import { db } from '@/db'
+import { users } from '@/db/schema'
+import { eq } from 'drizzle-orm'
+import { getSession } from '@/lib/session'
+import { redirect } from 'next/navigation'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -9,7 +14,15 @@ export const metadata: Metadata = {
   description: 'Tell us a bit about your organization to get started.',
 }
 
-export default function OnboardingPage() {
+export default async function OnboardingPage() {
+  const session = await getSession();
+  if (!session) redirect('/login');
+
+  const user = await db.query.users.findFirst({
+    where: eq(users.id, session.userId),
+  });
+
+  if (!user) redirect('/login');
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-6 relative">
       <div className="mb-8">
@@ -21,12 +34,9 @@ export default function OnboardingPage() {
         description="Let's set up your workspace in just a few seconds."
       >
         <div className="py-2">
-          <OnboardingForm />
+          <OnboardingForm user={{ name: user.name, email: user.email }} />
         </div>
         
-        <p className="mt-8 text-center text-[10px] text-muted-foreground uppercase tracking-widest font-medium">
-          Step 1 of 1 • Workspace Setup
-        </p>
       </AuthCard>
     </div>
   )
