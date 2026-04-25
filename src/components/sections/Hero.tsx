@@ -33,7 +33,7 @@ export const Hero = () => {
             </Link>
 
             <h1 className="mt-6 max-w-4xl mx-auto text-balance text-5xl font-bold md:text-6xl lg:mt-8 xl:text-[4.5rem]">
-              Stop Guessing. Start Knowing.
+              Stop Guessing. <span className="text-primary">Start Knowing.</span>
             </h1>
             <p className="mx-auto mt-6 max-w-2xl text-balance text-lg">
               {siteConfig.description}
