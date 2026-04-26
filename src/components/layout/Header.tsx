@@ -11,7 +11,7 @@ import { siteConfig } from '@/lib/site-config'
 
 const menuItems = siteConfig.mainNav
 
-export const Header = () => {
+export const Header = ({ user }: { user?: { name: string, email: string } | null }) => {
     const [menuState, setMenuState] = React.useState(false)
     const [isScrolled, setIsScrolled] = React.useState(false)
 
@@ -75,32 +75,53 @@ export const Header = () => {
                                     ))}
                                 </ul>
                             </div>
-                            <div className="flex w-full flex-col space-y-3 sm:flex-row sm:gap-3 sm:space-y-0 md:w-fit">
-                                <Button
-                                    asChild
-                                    variant="outline"
-                                    size="sm"
-                                    className={cn(isScrolled && 'lg:hidden')}>
-                                    <Link href="/login">
-                                        <span>Login</span>
-                                    </Link>
-                                </Button>
-                                <Button
-                                    asChild
-                                    size="sm"
-                                    className={cn(isScrolled && 'lg:hidden')}>
-                                    <Link href="/register">
-                                        <span>Sign Up</span>
-                                    </Link>
-                                </Button>
-                                <Button
-                                    asChild
-                                    size="sm"
-                                    className={cn(isScrolled ? 'lg:inline-flex' : 'hidden')}>
-                                    <Link href="/register">
-                                        <span>Get Started</span>
-                                    </Link>
-                                </Button>
+                            <div className="flex w-full flex-col space-y-3 sm:flex-row sm:gap-3 sm:space-y-0 md:w-fit items-center">
+                                {user ? (
+                                    <>
+                                        <div className="flex items-center gap-2 px-3 py-1 rounded-full border bg-muted/30">
+                                            <div className="size-6 rounded-full bg-primary flex items-center justify-center text-primary-foreground font-bold text-[10px]">
+                                                {user.name[0]}
+                                            </div>
+                                            <span className="text-xs font-medium pr-1">{user.name}</span>
+                                        </div>
+                                        <Button
+                                            asChild
+                                            size="sm"
+                                        >
+                                            <Link href="/dashboard">
+                                                <span>Dashboard</span>
+                                            </Link>
+                                        </Button>
+                                    </>
+                                ) : (
+                                    <>
+                                        <Button
+                                            asChild
+                                            variant="outline"
+                                            size="sm"
+                                            className={cn(isScrolled && 'lg:hidden')}>
+                                            <Link href="/login">
+                                                <span>Login</span>
+                                            </Link>
+                                        </Button>
+                                        <Button
+                                            asChild
+                                            size="sm"
+                                            className={cn(isScrolled && 'lg:hidden')}>
+                                            <Link href="/register">
+                                                <span>Sign Up</span>
+                                            </Link>
+                                        </Button>
+                                        <Button
+                                            asChild
+                                            size="sm"
+                                            className={cn(isScrolled ? 'lg:inline-flex' : 'hidden')}>
+                                            <Link href="/register">
+                                                <span>Get Started</span>
+                                            </Link>
+                                        </Button>
+                                    </>
+                                )}
                                 <ModeToggle />
                             </div>
                         </div>

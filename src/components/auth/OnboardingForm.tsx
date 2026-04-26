@@ -56,7 +56,7 @@ export function OnboardingForm({ user }: OnboardingFormProps) {
       </div>
 
       <div className="space-y-2 pt-2">
-        <Label htmlFor="orgName">Organization Name</Label>
+        <Label htmlFor="orgName">Company Name</Label>
         <div className="relative">
           <Building2 className="absolute left-3 top-3 size-4 text-muted-foreground" />
           <Input 

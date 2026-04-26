@@ -11,7 +11,7 @@ import { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Welcome to Jejaku',
-  description: 'Tell us a bit about your organization to get started.',
+  description: 'Tell us a bit about your company to get started.',
 }
 
 export default async function OnboardingPage() {

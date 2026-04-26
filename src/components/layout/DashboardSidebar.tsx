@@ -65,7 +65,7 @@ export function DashboardSidebar({ user }: DashboardSidebarProps) {
         <div className="mb-2 px-1">
           {!isCollapsed && (
             <p className="text-[9px] font-semibold uppercase tracking-widest text-muted-foreground/70 mb-1.5 ml-1">
-              Workspace
+              Company
             </p>
           )}
           <div className={cn(
@@ -77,7 +77,7 @@ export function DashboardSidebar({ user }: DashboardSidebarProps) {
             </div>
             {!isCollapsed && (
               <div className="flex-1 min-w-0">
-                <p className="text-xs font-semibold truncate leading-none">{user.organizationName || 'My Workspace'}</p>
+                <p className="text-xs font-semibold truncate leading-none">{user.organizationName || 'My Company'}</p>
               </div>
             )}
           </div>

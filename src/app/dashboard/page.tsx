@@ -24,7 +24,7 @@ export default async function DashboardPage() {
     <div className="p-5">
       <h1 className="text-xl font-bold mb-3">Welcome back, {user.name}!</h1>
       <div className="bg-muted/30 p-4 rounded-xl border border-border/50 mb-6">
-        <h2 className="text-base font-semibold mb-1">Workspace: {user.organizationName}</h2>
+        <h2 className="text-base font-semibold mb-1">Company: {user.organizationName}</h2>
         <p className="text-muted-foreground text-xs font-medium">Role: {user.role} • Industry: {user.industry}</p>
       </div>
       
