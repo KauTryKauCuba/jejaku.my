@@ -32,8 +32,10 @@ export async function registerUser(formData: FormData) {
   
   try {
     const hashedPassword = await hash(password, 10);
+    const userId = crypto.randomUUID();
 
     const [newUser] = await db.insert(users).values({
+      id: userId,
       name,
       email,
       password: hashedPassword,
