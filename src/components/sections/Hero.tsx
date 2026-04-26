@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { 
   ArrowRight, 
@@ -9,7 +9,8 @@ import {
   Shield, 
   Zap, 
   Globe, 
-  Layers 
+  Layers,
+  MousePointer2
 } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import Image from 'next/image'
@@ -17,15 +18,61 @@ import { siteConfig } from '@/lib/site-config'
 import { cn } from '@/lib/utils'
 
 const featureIcons = [
-  { Icon: BarChart3, color: 'bg-blue-500', pos: '-translate-x-24 md:-translate-x-[680px] -translate-y-12 md:-translate-y-[400px] rotate-[-12deg]' },
-  { Icon: MessageSquare, color: 'bg-emerald-500', pos: 'translate-x-24 md:translate-x-[680px] -translate-y-12 md:-translate-y-[400px] rotate-[12deg]' },
-  { Icon: Shield, color: 'bg-indigo-500', pos: '-translate-x-32 md:-translate-x-[750px] translate-y-4 md:-translate-y-[180px] rotate-[-8deg]' },
-  { Icon: Zap, color: 'bg-amber-500', pos: 'translate-x-32 md:translate-x-[750px] translate-y-4 md:-translate-y-[180px] rotate-[8deg]' },
-  { Icon: Globe, color: 'bg-orange-500', pos: '-translate-x-16 md:-translate-x-[660px] translate-y-16 md:translate-y-0 rotate-[-15deg]' },
-  { Icon: Layers, color: 'bg-rose-500', pos: 'translate-x-16 md:translate-x-[660px] translate-y-16 md:translate-y-0 rotate-[15deg]' },
+  { name: 'Advanced Analytics', Icon: BarChart3, color: 'bg-blue-500', pos: '-translate-x-24 md:-translate-x-[680px] -translate-y-12 md:-translate-y-[400px] rotate-[-12deg]', tx: -680, ty: -400 },
+  { name: 'Smart Messaging', Icon: MessageSquare, color: 'bg-emerald-500', pos: 'translate-x-24 md:translate-x-[680px] -translate-y-12 md:-translate-y-[400px] rotate-[12deg]', tx: 680, ty: -400 },
+  { name: 'Enterprise Security', Icon: Shield, color: 'bg-indigo-500', pos: '-translate-x-32 md:-translate-x-[750px] translate-y-4 md:-translate-y-[180px] rotate-[-8deg]', tx: -750, ty: -180 },
+  { name: 'Blazing Fast Speed', Icon: Zap, color: 'bg-amber-500', pos: 'translate-x-32 md:translate-x-[750px] translate-y-4 md:-translate-y-[180px] rotate-[8deg]', tx: 750, ty: -180 },
+  { name: 'Global Deployment', Icon: Globe, color: 'bg-orange-500', pos: '-translate-x-16 md:-translate-x-[660px] translate-y-16 md:translate-y-0 rotate-[-15deg]', tx: -660, ty: 0 },
+  { name: 'Modular Layers', Icon: Layers, color: 'bg-rose-500', pos: 'translate-x-16 md:translate-x-[660px] translate-y-16 md:translate-y-0 rotate-[15deg]', tx: 660, ty: 0 },
 ];
 
 export const Hero = () => {
+  const [cursorPos, setCursorPos] = useState({ x: 0, y: 0, z: 0 });
+  const [activeText, setActiveText] = useState('');
+  const [targetIndex, setTargetIndex] = useState(0);
+
+  useEffect(() => {
+    let isMounted = true;
+    
+    const animate = async () => {
+      while (isMounted) {
+        const feature = featureIcons[targetIndex];
+        
+        // 1. Move behind to the target
+        setCursorPos(prev => ({ ...prev, z: 0 }));
+        await new Promise(r => setTimeout(r, 100)); // Small delay for z-index switch
+        setCursorPos(prev => ({ ...prev, x: feature.tx, y: feature.ty }));
+        
+        // Wait for half movement then bring to top before arrival
+        await new Promise(r => setTimeout(r, 600));
+        setCursorPos(prev => ({ ...prev, z: 20 }));
+        
+        // Wait for the rest of the movement
+        await new Promise(r => setTimeout(r, 600));
+        
+        // 2. Already on top now, wait 0.5s before typing
+        await new Promise(r => setTimeout(r, 500));
+        
+        // 4. Typing effect
+        for (let i = 0; i <= feature.name.length; i++) {
+          if (!isMounted) return;
+          setActiveText(feature.name.slice(0, i));
+          await new Promise(r => setTimeout(r, 50));
+        }
+        
+        // 5. Wait to read
+        await new Promise(r => setTimeout(r, 2000));
+        
+        // 6. Clear and next
+        setActiveText('');
+        setTargetIndex((prev) => (prev + 1) % featureIcons.length);
+      }
+    };
+
+    animate();
+    return () => { isMounted = false; };
+  }, [targetIndex]);
+
   return (
     <section className="pb-24 md:pb-32">
       <div className="relative pt-20 md:pt-24">
@@ -77,7 +124,30 @@ export const Hero = () => {
           </div>
         </div>
 
-        <div className="relative mt-12 md:mt-20 flex justify-center px-4">
+        <div className="relative mt-12 md:mt-20 flex justify-center px-4 min-h-[400px] md:min-h-[600px]">
+          {/* Animated Cursor */}
+          <div 
+            className="absolute flex items-start gap-2 pointer-events-none transition-all duration-1000 ease-in-out"
+            style={{ 
+              transform: `translate(${cursorPos.x}px, ${cursorPos.y}px)`,
+              zIndex: cursorPos.z,
+              left: '50%',
+              top: '50%',
+              marginTop: '-12px',
+              marginLeft: '-4px'
+            }}
+          >
+            <MousePointer2 className="size-5 text-black fill-black shadow-xl" />
+            {activeText && (
+              <div className="bg-background/95 backdrop-blur-sm border border-primary/20 px-3 py-1.5 rounded-lg shadow-2xl animate-in fade-in zoom-in duration-300">
+                <p className="text-[11px] font-bold text-primary tracking-tight whitespace-nowrap">
+                  {activeText}
+                  <span className="inline-block w-0.5 h-3 ml-0.5 bg-primary animate-pulse align-middle" />
+                </p>
+              </div>
+            )}
+          </div>
+
           {/* Static Feature Icons */}
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
             {featureIcons.map((item, i) => (
