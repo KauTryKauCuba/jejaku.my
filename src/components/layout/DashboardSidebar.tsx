@@ -53,7 +53,7 @@ export function DashboardSidebar({ user, isMobileOpen, setIsMobileOpen }: Dashbo
 
       <aside 
         className={cn(
-          "border-r bg-background flex-col h-screen sticky top-0 overflow-hidden z-40 transition-all duration-300 lg:flex",
+          "border-r bg-background flex-col h-screen sticky top-0 overflow-hidden z-40 lg:flex",
           isCollapsed ? "w-16" : "w-60",
           isMobileOpen ? "fixed inset-y-0 left-0 flex w-60 shadow-2xl" : "hidden lg:flex"
         )}
