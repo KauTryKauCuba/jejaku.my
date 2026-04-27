@@ -15,7 +15,7 @@ export function LoginForm() {
   return (
     <form action={action} className="space-y-4">
       {state?.error && (
-        <div className="p-3 text-sm font-medium text-red-500 bg-red-500/10 rounded-lg text-center">
+        <div className="p-3 text-sm font-medium text-destructive bg-destructive/10 rounded-lg text-center">
           {state.error}
         </div>
       )}
@@ -36,7 +36,7 @@ export function LoginForm() {
       <div className="space-y-2">
         <div className="flex items-center justify-between">
           <Label htmlFor="password">Password</Label>
-          <button type="button" className="text-[11px] text-primary hover:underline underline-offset-4">
+          <button type="button" className="text-xs text-primary hover:underline underline-offset-4">
             Forgot password?
           </button>
         </div>
@@ -58,7 +58,7 @@ export function LoginForm() {
       >
         {isPending ? (
           <>
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            <Loader2 className="mr-2 h-4 w-4" />
             Signing in...
           </>
         ) : (

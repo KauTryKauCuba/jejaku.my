@@ -12,12 +12,14 @@ export function ModeToggle() {
     <Button
       variant="ghost"
       size="icon"
-      className="size-9 rounded-xl border border-border/50 bg-background/50 backdrop-blur-sm"
+      className="size-9 rounded-xl border border-border/50 bg-background/50 backdrop-blur-sm transition-none"
       onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
       aria-label="Toggle theme"
     >
-      <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 dark:-rotate-90 dark:scale-0" />
-      <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 dark:rotate-0 dark:scale-100" />
+      <div className="relative size-full flex items-center justify-center">
+        <Sun className="h-[1.2rem] w-[1.2rem] dark:hidden" />
+        <Moon className="hidden h-[1.2rem] w-[1.2rem] dark:block" />
+      </div>
       <span className="sr-only">Toggle theme</span>
     </Button>
   );

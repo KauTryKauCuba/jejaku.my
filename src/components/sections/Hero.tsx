@@ -2,13 +2,13 @@
 
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { 
-  ArrowRight, 
-  BarChart3, 
-  MessageSquare, 
-  Shield, 
-  Zap, 
-  Globe, 
+import {
+  ArrowRight,
+  BarChart3,
+  MessageSquare,
+  Shield,
+  Zap,
+  Globe,
   Layers,
   MousePointer2
 } from 'lucide-react'
@@ -33,36 +33,36 @@ export const Hero = () => {
 
   useEffect(() => {
     let isMounted = true;
-    
+
     const animate = async () => {
       while (isMounted) {
         const feature = featureIcons[targetIndex];
-        
+
         // 1. Move behind to the target
         setCursorPos(prev => ({ ...prev, z: 0 }));
         await new Promise(r => setTimeout(r, 100)); // Small delay for z-index switch
         setCursorPos(prev => ({ ...prev, x: feature.tx, y: feature.ty }));
-        
+
         // Wait for half movement then bring to top before arrival
         await new Promise(r => setTimeout(r, 600));
         setCursorPos(prev => ({ ...prev, z: 20 }));
-        
+
         // Wait for the rest of the movement
         await new Promise(r => setTimeout(r, 600));
-        
+
         // 2. Already on top now, wait 0.5s before typing
         await new Promise(r => setTimeout(r, 500));
-        
+
         // 4. Typing effect
         for (let i = 0; i <= feature.name.length; i++) {
           if (!isMounted) return;
           setActiveText(feature.name.slice(0, i));
           await new Promise(r => setTimeout(r, 50));
         }
-        
+
         // 5. Wait to read
         await new Promise(r => setTimeout(r, 2000));
-        
+
         // 6. Clear and next
         setActiveText('');
         setTargetIndex((prev) => (prev + 1) % featureIcons.length);
@@ -122,13 +122,16 @@ export const Hero = () => {
               </Link>
             </Button>
           </div>
+          <p className="mt-4 text-xs text-muted-foreground font-medium flex items-center justify-center gap-1.5">
+            "This inventory management system is yours to use completely free, forever."
+          </p>
         </div>
 
         <div className="relative mt-12 md:mt-20 flex justify-center px-4 min-h-[400px] md:min-h-[600px]">
           {/* Animated Cursor */}
-          <div 
+          <div
             className="absolute flex items-start gap-2 pointer-events-none transition-all duration-1000 ease-in-out"
-            style={{ 
+            style={{
               transform: `translate(${cursorPos.x}px, ${cursorPos.y}px)`,
               zIndex: cursorPos.z,
               left: '50%',
@@ -137,10 +140,10 @@ export const Hero = () => {
               marginLeft: '-4px'
             }}
           >
-            <MousePointer2 className="size-5 text-black fill-black shadow-xl" />
+            <MousePointer2 className="size-5 text-foreground fill-foreground shadow-xl" />
             {activeText && (
               <div className="bg-background/95 backdrop-blur-sm border border-primary/20 px-3 py-1.5 rounded-lg shadow-2xl animate-in fade-in zoom-in duration-300">
-                <p className="text-[11px] font-bold text-primary tracking-tight whitespace-nowrap">
+                <p className="text-xs font-bold text-primary tracking-tight whitespace-nowrap">
                   {activeText}
                   <span className="inline-block w-0.5 h-3 ml-0.5 bg-primary animate-pulse align-middle" />
                 </p>
@@ -158,7 +161,7 @@ export const Hero = () => {
                   item.color,
                   item.pos
                 )}
-                style={{ 
+                style={{
                   boxShadow: '0 20px 40px -10px rgba(0,0,0,0.3)'
                 }}
               >

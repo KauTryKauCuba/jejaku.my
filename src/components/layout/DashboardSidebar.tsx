@@ -7,19 +7,24 @@ import { cn } from '@/lib/utils';
 import { Logo } from '@/components/ui/SiteLogo';
 import { 
   LayoutDashboard, 
+  Package, 
   Users, 
   Settings, 
-  LogOut, 
-  Briefcase,
+  Truck,
+  ArrowLeftRight,
   ChevronLeft,
   Bell,
-  Menu
+  Menu,
+  X
 } from 'lucide-react';
+
 import { logoutUser } from '@/app/actions/auth';
 
 const navItems = [
   { name: 'Overview', href: '/dashboard', icon: LayoutDashboard },
-  { name: 'Projects', href: '/dashboard/projects', icon: Briefcase },
+  { name: 'Inventory', href: '/dashboard/inventory', icon: Package },
+  { name: 'Suppliers', href: '/dashboard/suppliers', icon: Truck },
+  { name: 'Transactions', href: '/dashboard/transactions', icon: ArrowLeftRight },
   { name: 'Team', href: '/dashboard/team', icon: Users },
   { name: 'Settings', href: '/dashboard/settings', icon: Settings },
 ];
@@ -32,47 +37,54 @@ interface DashboardSidebarProps {
   };
 }
 
-export function DashboardSidebar({ user }: DashboardSidebarProps) {
+export function DashboardSidebar({ user, isMobileOpen, setIsMobileOpen }: DashboardSidebarProps & { isMobileOpen?: boolean, setIsMobileOpen?: (open: boolean) => void }) {
   const pathname = usePathname();
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   return (
-    <aside 
-      className={cn(
-        "border-r bg-background flex flex-col h-screen sticky top-0 overflow-hidden z-20 transition-none",
-        isCollapsed ? "w-16" : "w-48"
+    <>
+      {/* Mobile Overlay */}
+      {isMobileOpen && (
+        <div 
+          className="fixed inset-0 bg-background/80 backdrop-blur-sm z-30 lg:hidden"
+          onClick={() => setIsMobileOpen?.(false)}
+        />
       )}
-    >
-      <div className="p-4 border-b flex items-center h-14 relative">
-        {!isCollapsed && (
-          <div className="flex-1">
-            <Logo className="h-4" />
-          </div>
-        )}
-        
-        <button 
-          onClick={() => setIsCollapsed(!isCollapsed)}
-          className={cn(
-            "p-1.5 rounded-lg hover:bg-accent text-muted-foreground transition-none",
-            isCollapsed ? "mx-auto" : "ml-auto"
-          )}
-        >
-          {isCollapsed ? <Menu className="size-4" /> : <ChevronLeft className="size-4" />}
-        </button>
-      </div>
 
-      <div className="flex-1 py-4 px-2 space-y-1 overflow-y-auto overflow-x-hidden">
-        <div className="mb-2 px-1">
+      <aside 
+        className={cn(
+          "border-r bg-background flex-col h-screen sticky top-0 overflow-hidden z-40 transition-all duration-300 lg:flex",
+          isCollapsed ? "w-16" : "w-60",
+          isMobileOpen ? "fixed inset-y-0 left-0 flex w-60 shadow-2xl" : "hidden lg:flex"
+        )}
+      >
+        <div className="p-4 border-b flex items-center h-14 relative justify-between">
+          <Link href="/" className={cn("flex-1", (isCollapsed && !isMobileOpen) && "hidden")}>
+            <Logo className="h-4" />
+          </Link>
+          <button 
+            onClick={() => isMobileOpen ? setIsMobileOpen?.(false) : setIsCollapsed(!isCollapsed)}
+            className={cn(
+              "p-1.5 rounded-lg hover:bg-muted text-muted-foreground",
+              (isCollapsed && !isMobileOpen) && "mx-auto"
+            )}
+          >
+            {isMobileOpen ? <X className="size-4" /> : (isCollapsed ? <Menu className="size-4" /> : <ChevronLeft className="size-4" />)}
+          </button>
+        </div>
+
+      <div className="flex-1 py-6 px-3 space-y-2 overflow-y-auto overflow-x-hidden">
+        <div className="mb-3 px-1">
           {!isCollapsed && (
-            <p className="text-[9px] font-semibold uppercase tracking-widest text-muted-foreground/70 mb-1.5 ml-1">
+            <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground/70 mb-1.5 ml-1">
               Company
             </p>
           )}
           <div className={cn(
-            "flex items-center rounded-xl bg-muted/30 border border-border/40 overflow-hidden",
-            isCollapsed ? "p-1.5 justify-center" : "p-1.5 gap-2.5"
+            "flex items-center rounded-xl bg-muted/30 border border-border/40 overflow-hidden p-2 gap-3",
+            isCollapsed && "justify-center px-0 bg-transparent border-none"
           )}>
-            <div className="size-7 rounded-lg bg-primary flex items-center justify-center text-primary-foreground font-bold text-[10px] uppercase shrink-0">
+            <div className="size-7 rounded-lg bg-primary flex items-center justify-center text-primary-foreground font-bold text-xs uppercase shrink-0">
               {user.organizationName?.[0] || 'J'}
             </div>
             {!isCollapsed && (
@@ -83,9 +95,9 @@ export function DashboardSidebar({ user }: DashboardSidebarProps) {
           </div>
         </div>
 
-        <nav className="space-y-0.5">
+        <nav className="space-y-1">
           {!isCollapsed && (
-            <p className="px-2 text-[9px] font-semibold uppercase tracking-widest text-muted-foreground/70 mb-1.5 mt-4 ml-1">
+            <p className="px-2 text-xs font-semibold uppercase tracking-widest text-muted-foreground/70 mb-2 mt-6 ml-1">
               Main Menu
             </p>
           )}
@@ -97,13 +109,13 @@ export function DashboardSidebar({ user }: DashboardSidebarProps) {
                 key={item.name}
                 href={item.href}
                 className={cn(
-                  "flex items-center rounded-lg text-xs font-medium group overflow-hidden transition-none",
-                  isCollapsed ? "p-2.5 justify-center" : "gap-2.5 px-2.5 py-1.5",
+                  "flex items-center rounded-lg text-xs font-medium group overflow-hidden transition-none px-3 py-2",
+                  isCollapsed ? "justify-center px-0" : "gap-3",
                   isActive 
                     ? "bg-primary/10 text-primary" 
                     : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                 )}
-                title={isCollapsed ? item.name : undefined}
+                title={isCollapsed ? item.name : ""}
               >
                 <Icon className={cn("size-3.5 shrink-0", isActive ? "text-primary" : "text-muted-foreground group-hover:text-accent-foreground")} />
                 {!isCollapsed && (
@@ -117,44 +129,7 @@ export function DashboardSidebar({ user }: DashboardSidebarProps) {
           })}
         </nav>
       </div>
-
-      <div className="p-2 border-t space-y-1.5">
-        <button className={cn(
-          "flex items-center w-full rounded-lg text-xs font-medium text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-none group overflow-hidden",
-          isCollapsed ? "p-2.5 justify-center" : "gap-2.5 px-2.5 py-1.5"
-        )}>
-          <Bell className="size-3.5 shrink-0 group-hover:text-accent-foreground" />
-          {!isCollapsed && (
-            <span>
-              Notifications
-            </span>
-          )}
-          {!isCollapsed && (
-            <div className="ml-auto bg-primary/10 text-primary text-[9px] px-1.5 py-0.5 rounded-full font-bold">
-              3
-            </div>
-          )}
-        </button>
-
-        <form action={async () => {
-          await logoutUser();
-        }} className="mt-1">
-          <button 
-            type="submit"
-            className={cn(
-              "flex items-center w-full rounded-lg text-xs font-medium text-destructive hover:bg-destructive/10 transition-none group overflow-hidden",
-              isCollapsed ? "p-2.5 justify-center" : "gap-2.5 px-2.5 py-1.5"
-            )}
-          >
-            <LogOut className="size-3.5 shrink-0" />
-            {!isCollapsed && (
-              <span>
-                Logout
-              </span>
-            )}
-          </button>
-        </form>
-      </div>
     </aside>
+    </>
   );
 }

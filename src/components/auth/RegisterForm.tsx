@@ -15,7 +15,7 @@ export function RegisterForm() {
   return (
     <form action={action} className="space-y-3">
       {state?.error && (
-        <div className="p-3 text-sm font-medium text-red-500 bg-red-500/10 rounded-lg text-center">
+        <div className="p-3 text-sm font-medium text-destructive bg-destructive/10 rounded-lg text-center">
           {state.error}
         </div>
       )}
@@ -56,7 +56,7 @@ export function RegisterForm() {
           className="!transition-none" 
           disabled={isPending}
         />
-        <p className="text-[10px] text-muted-foreground flex items-center gap-1">
+        <p className="text-xs text-muted-foreground flex items-center gap-1">
           <ShieldCheck className="size-3 text-primary" />
           Must be at least 8 characters with a number
         </p>
@@ -69,7 +69,7 @@ export function RegisterForm() {
       >
         {isPending ? (
           <>
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            <Loader2 className="mr-2 h-4 w-4" />
             Creating account...
           </>
         ) : (

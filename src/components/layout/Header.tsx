@@ -79,7 +79,7 @@ export const Header = ({ user }: { user?: { name: string, email: string } | null
                                 {user ? (
                                     <>
                                         <div className="flex items-center gap-2 px-3 py-1 rounded-full border bg-muted/30">
-                                            <div className="size-6 rounded-full bg-primary flex items-center justify-center text-primary-foreground font-bold text-[10px]">
+                                            <div className="size-6 rounded-full bg-primary flex items-center justify-center text-primary-foreground font-bold text-xs">
                                                 {user.name[0]}
                                             </div>
                                             <span className="text-xs font-medium pr-1">{user.name}</span>

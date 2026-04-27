@@ -24,8 +24,9 @@ export default async function OnboardingPage() {
 
   if (!user) redirect('/login');
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-6 relative">
-      <div className="mb-8">
+    <div className="min-h-screen flex flex-col items-center justify-center p-6 relative overflow-hidden">
+      <div className="absolute inset-0 bg-dot-grid [mask-image:radial-gradient(ellipse_at_center,white,transparent)] pointer-events-none" />
+      <div className="relative mb-8">
         <Logo className="h-5" />
       </div>
 

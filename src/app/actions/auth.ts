@@ -143,3 +143,45 @@ export async function logoutUser() {
   await deleteSession();
   redirect('/login');
 }
+
+const UpdateProfileSchema = z.object({
+  name: z.string().min(2, 'Name is too short'),
+  orgName: z.string().min(2, 'Organization name is too short'),
+  role: z.string().min(2, 'Role is required'),
+  industry: z.string().min(2, 'Industry is required'),
+});
+
+export async function updateProfile(formData: FormData) {
+  const session = await getSession();
+  const userId = session?.userId;
+
+  if (!userId) {
+    return { error: 'Unauthorized' };
+  }
+
+  const rawData = Object.fromEntries(formData.entries());
+  const validated = UpdateProfileSchema.safeParse(rawData);
+
+  if (!validated.success) {
+    return { error: validated.error.issues[0].message };
+  }
+
+  const { name, orgName, role, industry } = validated.data;
+
+  try {
+    await db.update(users)
+      .set({
+        name,
+        organizationName: orgName,
+        role,
+        industry,
+        updatedAt: new Date(),
+      })
+      .where(eq(users.id, userId));
+    
+    return { success: true };
+  } catch (error) {
+    console.error('Update Profile Error:', error);
+    return { error: 'Failed to update profile' };
+  }
+}

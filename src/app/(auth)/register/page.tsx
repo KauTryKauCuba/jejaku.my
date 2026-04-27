@@ -42,7 +42,7 @@ export default function RegisterPage() {
         />
         <RegisterForm />
         
-        <p className="mt-6 text-center text-[11px] text-muted-foreground leading-relaxed">
+        <p className="mt-6 text-center text-xs text-muted-foreground leading-relaxed">
           By clicking &quot;Get Started&quot;, you agree to our{' '}
           <Link href="#" className="underline underline-offset-4 hover:text-primary">Terms of Service</Link> and{' '}
           <Link href="#" className="underline underline-offset-4 hover:text-primary">Privacy Policy</Link>.
