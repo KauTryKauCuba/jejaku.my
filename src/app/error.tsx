@@ -29,7 +29,7 @@ export default function Error({
         <h1 className="mt-6 text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
           Something went wrong!
         </h1>
-        <p className="mt-6 text-base leading-7 text-muted-foreground max-w-md">
+        <p className="mt-6 text-base font-normal leading-7 text-muted-foreground max-w-md">
           An unexpected error has occurred. We have been notified and are working to fix it.
         </p>
         <div className="mt-10 flex items-center justify-center gap-x-6">

@@ -126,7 +126,7 @@ export function OnboardingForm({ user }: OnboardingFormProps) {
       <Button 
         type="submit"
         disabled={isPending}
-        className="w-full h-11 rounded-xl text-base bg-primary text-primary-foreground hover:opacity-90 mt-4 !transition-none"
+        className="w-full h-11 rounded-xl text-base font-normal bg-primary text-primary-foreground hover:opacity-90 mt-4 !transition-none"
       >
         {isPending ? (
           <>

@@ -106,7 +106,7 @@ export const Hero = () => {
           </p>
 
           <div className="mt-8 flex flex-col items-center justify-center gap-2 md:flex-row">
-            <Button asChild size="lg" className="rounded-xl px-5 text-base">
+            <Button asChild size="lg" className="rounded-xl px-5 text-base font-normal">
               <Link href="/register">
                 <span className="text-nowrap">Start Building</span>
               </Link>

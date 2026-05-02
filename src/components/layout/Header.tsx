@@ -63,7 +63,7 @@ export const Header = ({ user }: { user?: { name: string, email: string } | null
 
                         <div className="bg-background group-data-[state=active]:block lg:group-data-[state=active]:flex mb-6 hidden w-full flex-wrap items-center justify-end space-y-8 rounded-3xl border p-6 md:flex-nowrap lg:m-0 lg:flex lg:w-fit lg:gap-6 lg:space-y-0 lg:border-transparent lg:bg-transparent lg:p-0 lg:shadow-none dark:lg:bg-transparent">
                             <div className="lg:hidden">
-                                <ul className="space-y-6 text-base">
+                                <ul className="space-y-6 text-base font-normal">
                                     {menuItems.map((item, index) => (
                                         <li key={index}>
                                             <Link
