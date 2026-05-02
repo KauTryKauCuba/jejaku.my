@@ -100,3 +100,15 @@ export const stockLevelsRelations = relations(stockLevels, ({ one }) => ({
   item: one(items, { fields: [stockLevels.itemId], references: [items.id] }),
   location: one(locations, { fields: [stockLevels.locationId], references: [locations.id] }),
 }));
+
+export const stockMovementsRelations = relations(stockMovements, ({ one }) => ({
+  item: one(items, { fields: [stockMovements.itemId], references: [items.id] }),
+  user: one(users, { fields: [stockMovements.userId], references: [users.id] }),
+  fromLocation: one(locations, { fields: [stockMovements.fromLocationId], references: [locations.id] }),
+  toLocation: one(locations, { fields: [stockMovements.toLocationId], references: [locations.id] }),
+}));
+
+export const usersRelations = relations(users, ({ one }) => ({
+  organization: one(organizations, { fields: [users.organizationId], references: [organizations.id] }),
+}));
+
