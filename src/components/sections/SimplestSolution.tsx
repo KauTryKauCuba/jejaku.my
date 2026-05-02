@@ -8,15 +8,15 @@ const highlights = [
     title: 'Instant Setup',
     description: 'Get started in minutes, not days. No complex configuration required.',
     icon: Zap,
-    color: 'text-amber-500',
-    bg: 'bg-amber-500/10'
+    color: 'text-primary',
+    bg: 'bg-primary/10'
   },
   {
     title: 'Visual Tracking',
     description: 'See your stock levels at a glance with beautiful, real-time dashboards.',
     icon: LayoutDashboard,
-    color: 'text-blue-500',
-    bg: 'bg-blue-500/10'
+    color: 'text-primary',
+    bg: 'bg-primary/10'
   },
   {
     title: 'One-Click Actions',

@@ -76,7 +76,7 @@ export function DashboardSidebar({ user, isMobileOpen, setIsMobileOpen }: Dashbo
       <div className="flex-1 py-6 px-3 space-y-2 overflow-y-auto overflow-x-hidden">
         <div className="mb-3 px-1">
           {!isCollapsed && (
-            <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground/70 mb-1.5 ml-1">
+            <p className="text-xs font-semibold  text-muted-foreground/70 mb-1.5 ml-1">
               Company
             </p>
           )}
@@ -84,7 +84,7 @@ export function DashboardSidebar({ user, isMobileOpen, setIsMobileOpen }: Dashbo
             "flex items-center rounded-xl bg-muted/30 border border-border/40 overflow-hidden p-2 gap-3",
             isCollapsed && "justify-center px-0 bg-transparent border-none"
           )}>
-            <div className="size-7 rounded-lg bg-primary flex items-center justify-center text-primary-foreground font-bold text-xs uppercase shrink-0">
+            <div className="size-7 rounded-lg bg-primary flex items-center justify-center text-primary-foreground font-bold text-xs  shrink-0">
               {user.organizationName?.[0] || 'J'}
             </div>
             {!isCollapsed && (
@@ -97,7 +97,7 @@ export function DashboardSidebar({ user, isMobileOpen, setIsMobileOpen }: Dashbo
 
         <nav className="space-y-1">
           {!isCollapsed && (
-            <p className="px-2 text-xs font-semibold uppercase tracking-widest text-muted-foreground/70 mb-2 mt-6 ml-1">
+            <p className="px-2 text-xs font-semibold  text-muted-foreground/70 mb-2 mt-6 ml-1">
               Main Menu
             </p>
           )}

@@ -127,15 +127,15 @@ export function Footer() {
           </p>
 
           <div className="flex flex-wrap gap-6">
-            <div className="flex items-center gap-2 text-xs uppercase tracking-wider font-medium text-muted-foreground">
+            <div className="flex items-center gap-2 text-xs  tracking-wider font-medium text-muted-foreground">
               <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
               Front end: <span className="text-foreground">Operational</span>
             </div>
-            <div className="flex items-center gap-2 text-xs uppercase tracking-wider font-medium text-muted-foreground">
+            <div className="flex items-center gap-2 text-xs  tracking-wider font-medium text-muted-foreground">
               <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
               Back end: <span className="text-foreground">Operational</span>
             </div>
-            <div className="flex items-center gap-2 text-xs uppercase tracking-wider font-medium text-muted-foreground">
+            <div className="flex items-center gap-2 text-xs  tracking-wider font-medium text-muted-foreground">
               <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
               DB: <span className="text-foreground">Operational</span>
             </div>

@@ -65,33 +65,33 @@ export default async function DashboardPage() {
               <TrendingUp className="size-3" /> +2.4%
             </span>
           </div>
-          <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Total Products</p>
+          <p className="text-xs font-medium text-muted-foreground ">Total Products</p>
           <p className="text-[22px] font-bold mt-1">124</p>
         </div>
 
         <div className="group p-5 rounded-2xl border bg-card">
           <div className="flex items-center justify-between mb-3">
-            <div className="p-2 rounded-xl bg-orange-500/10 text-orange-500 group-hover:scale-110">
+            <div className="p-2 rounded-xl bg-primary/10 text-primary group-hover:scale-110">
               <DollarSign className="size-5" />
             </div>
-            <span className="text-xs font-bold text-blue-500 bg-blue-500/10 px-2 py-0.5 rounded-full">
+            <span className="text-xs font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-full">
               Updated just now
             </span>
           </div>
-          <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Stock Value</p>
+          <p className="text-xs font-medium text-muted-foreground ">Stock Value</p>
           <p className="text-[22px] font-bold mt-1">RM 12,450.00</p>
         </div>
 
         <div className="group p-5 rounded-2xl border bg-card">
           <div className="flex items-center justify-between mb-3">
-            <div className="p-2 rounded-xl bg-amber-500/10 text-amber-500 group-hover:scale-110">
+            <div className="p-2 rounded-xl bg-primary/10 text-primary group-hover:scale-110">
               <AlertTriangle className="size-5" />
             </div>
-            <span className="text-xs font-bold text-amber-500 bg-amber-500/10 px-2 py-0.5 rounded-full">
+            <span className="text-xs font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-full">
               Needs attention
             </span>
           </div>
-          <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Low Stock Items</p>
+          <p className="text-xs font-medium text-muted-foreground ">Low Stock Items</p>
           <p className="text-[22px] font-bold mt-1">8</p>
         </div>
 
@@ -104,7 +104,7 @@ export default async function DashboardPage() {
               Critical
             </span>
           </div>
-          <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Out of Stock</p>
+          <p className="text-xs font-medium text-muted-foreground ">Out of Stock</p>
           <p className="text-[22px] font-bold mt-1">3</p>
         </div>
       </div>
@@ -133,18 +133,18 @@ export default async function DashboardPage() {
                 <div key={i} className="flex items-center justify-between p-4 hover:bg-muted/30 group">
                   <div className="flex items-center gap-4">
                     <div className={`p-2 rounded-full shrink-0 ${
-                      activity.status === 'increase' ? 'bg-emerald-500/10 text-emerald-500' : 'bg-orange-500/10 text-orange-500'
+                      activity.status === 'increase' ? 'bg-emerald-500/10 text-emerald-500' : 'bg-primary/10 text-primary'
                     }`}>
                       {activity.status === 'increase' ? <ArrowUpRight className="size-3.5" /> : <ArrowDownRight className="size-3.5" />}
                     </div>
                     <div>
                       <p className="text-sm font-semibold group-hover:text-primary">{activity.name}</p>
-                      <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider">{activity.type} • {activity.time}</p>
+                      <p className="text-xs text-muted-foreground font-medium ">{activity.type} • {activity.time}</p>
                     </div>
                   </div>
                   <div className="text-right">
                     <p className={`text-sm font-bold ${
-                      activity.status === 'increase' ? 'text-emerald-500' : 'text-orange-500'
+                      activity.status === 'increase' ? 'text-emerald-500' : 'text-primary'
                     }`}>
                       {activity.qty}
                     </p>
