@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
 import { db } from '@/db';
-import { users } from '@/db/schema';
+import { users, organizations } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import { getSession } from '@/lib/session';
 import { 
@@ -28,6 +28,12 @@ export default async function DashboardPage() {
     where: eq(users.id, userId),
   });
 
+  const organization = user?.organizationId 
+    ? await db.query.organizations.findFirst({
+        where: eq(organizations.id, user.organizationId)
+      })
+    : null;
+
   if (!user || !user.isOnboarded) {
     redirect('/onboarding');
   }
@@ -38,8 +44,8 @@ export default async function DashboardPage() {
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
           <h1 className="text-[22px] font-bold tracking-tight">Overview</h1>
-          <p className="text-muted-foreground mt-1">
-            Welcome back to <span className="font-semibold text-foreground">{user.organizationName}</span>'s inventory.
+          <p className="text-muted-foreground mt-1 text-sm font-normal">
+            Welcome back to <span className="font-semibold text-foreground">{organization?.name || 'your'}</span> inventory.
           </p>
         </div>
         <div className="flex items-center gap-3">

@@ -2,7 +2,7 @@ import React from 'react';
 import { redirect } from 'next/navigation';
 import { getSession } from '@/lib/session';
 import { db } from '@/db';
-import { users } from '@/db/schema';
+import { users, organizations } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import { EditProfileForm } from '@/components/auth/EditProfileForm';
 import { UserCircle } from 'lucide-react';
@@ -23,12 +23,18 @@ export default async function ProfilePage() {
     redirect('/login');
   }
 
+  const organization = user.organizationId 
+    ? await db.query.organizations.findFirst({
+        where: eq(organizations.id, user.organizationId)
+      })
+    : null;
+
   return (
     <div className="p-4 lg:p-8 space-y-6">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
           <h1 className="text-[22px] font-bold tracking-tight">Edit Profile</h1>
-          <p className="text-muted-foreground mt-1">
+          <p className="text-muted-foreground mt-1 text-sm font-normal">
             Update your personal information and organization details.
           </p>
         </div>
@@ -38,9 +44,9 @@ export default async function ProfilePage() {
         <EditProfileForm user={{
           name: user.name,
           email: user.email,
-          organizationName: user.organizationName,
-          role: user.role,
-          industry: user.industry
+          organizationName: organization?.name || '',
+          role: user.role || '',
+          industry: organization?.industry || ''
         }} />
       </div>
     </div>

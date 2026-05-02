@@ -1,7 +1,7 @@
 'use server';
 
 import { db } from '@/db';
-import { users } from '@/db/schema';
+import { users, organizations } from '@/db/schema';
 import { hash } from 'bcryptjs';
 import { z } from 'zod';
 import { redirect } from 'next/navigation';
@@ -123,11 +123,17 @@ export async function completeOnboarding(formData: FormData) {
   const { orgName, role, industry } = validated.data;
 
   try {
+    // 1. Create organization
+    const [newOrg] = await db.insert(organizations).values({
+      name: orgName,
+      industry: industry,
+    }).returning();
+
+    // 2. Update user to link to organization
     await db.update(users)
       .set({
-        organizationName: orgName,
+        organizationId: newOrg.id,
         role,
-        industry,
         isOnboarded: true,
       })
       .where(eq(users.id, userId));
@@ -169,15 +175,33 @@ export async function updateProfile(formData: FormData) {
   const { name, orgName, role, industry } = validated.data;
 
   try {
+    const user = await db.query.users.findFirst({
+      where: eq(users.id, userId),
+    });
+
+    if (!user) {
+      return { error: 'User not found' };
+    }
+
+    // 1. Update user
     await db.update(users)
       .set({
         name,
-        organizationName: orgName,
         role,
-        industry,
         updatedAt: new Date(),
       })
       .where(eq(users.id, userId));
+    
+    // 2. Update organization
+    if (user.organizationId) {
+      await db.update(organizations)
+        .set({
+          name: orgName,
+          industry,
+          updatedAt: new Date(),
+        })
+        .where(eq(organizations.id, user.organizationId));
+    }
     
     return { success: true };
   } catch (error) {
