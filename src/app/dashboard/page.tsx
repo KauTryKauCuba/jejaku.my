@@ -37,7 +37,7 @@ export default async function DashboardPage() {
       {/* Header Section */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Overview</h1>
+          <h1 className="text-[22px] font-bold tracking-tight">Overview</h1>
           <p className="text-muted-foreground mt-1">
             Welcome back to <span className="font-semibold text-foreground">{user.organizationName}</span>'s inventory.
           </p>
@@ -66,7 +66,7 @@ export default async function DashboardPage() {
             </span>
           </div>
           <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Total Products</p>
-          <p className="text-2xl font-bold mt-1">124</p>
+          <p className="text-[22px] font-bold mt-1">124</p>
         </div>
 
         <div className="group p-5 rounded-2xl border bg-card">
@@ -79,7 +79,7 @@ export default async function DashboardPage() {
             </span>
           </div>
           <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Stock Value</p>
-          <p className="text-2xl font-bold mt-1">RM 12,450.00</p>
+          <p className="text-[22px] font-bold mt-1">RM 12,450.00</p>
         </div>
 
         <div className="group p-5 rounded-2xl border bg-card">
@@ -92,7 +92,7 @@ export default async function DashboardPage() {
             </span>
           </div>
           <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Low Stock Items</p>
-          <p className="text-2xl font-bold mt-1">8</p>
+          <p className="text-[22px] font-bold mt-1">8</p>
         </div>
 
         <div className="group p-5 rounded-2xl border bg-card">
@@ -105,7 +105,7 @@ export default async function DashboardPage() {
             </span>
           </div>
           <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Out of Stock</p>
-          <p className="text-2xl font-bold mt-1">3</p>
+          <p className="text-[22px] font-bold mt-1">3</p>
         </div>
       </div>
 

@@ -27,7 +27,7 @@ export default async function ProfilePage() {
     <div className="p-4 lg:p-8 space-y-6">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Edit Profile</h1>
+          <h1 className="text-[22px] font-bold tracking-tight">Edit Profile</h1>
           <p className="text-muted-foreground mt-1">
             Update your personal information and organization details.
           </p>

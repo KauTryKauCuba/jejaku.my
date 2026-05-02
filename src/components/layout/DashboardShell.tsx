@@ -3,6 +3,7 @@
 import React, { useState } from 'react'
 import { DashboardSidebar } from './DashboardSidebar'
 import { DashboardHeader } from './DashboardHeader'
+import { AnimatedLines } from '@/components/ui/AnimatedLines'
 
 interface DashboardShellProps {
   user: {
@@ -24,13 +25,16 @@ export function DashboardShell({ user, children }: DashboardShellProps) {
         isMobileOpen={isMobileOpen} 
         setIsMobileOpen={setIsMobileOpen} 
       />
-      <main className="flex-1 overflow-y-auto bg-background flex flex-col min-w-0">
+      <main className="flex-1 overflow-y-auto bg-background flex flex-col min-w-0 relative">
         <DashboardHeader 
           user={user} 
           onMenuClick={() => setIsMobileOpen(true)} 
         />
-        <div className="flex-1 bg-dot-grid">
-          {children}
+        <div className="flex-1 relative">
+          <AnimatedLines />
+          <div className="relative z-10">
+            {children}
+          </div>
         </div>
       </main>
     </div>

@@ -4,7 +4,7 @@ export default function TeamPage() {
   return (
     <div className="p-4 lg:p-8 space-y-6">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">Team</h1>
+        <h1 className="text-[22px] font-bold tracking-tight">Team</h1>
         <p className="text-muted-foreground mt-1">
           Manage team members and their access permissions.
         </p>
