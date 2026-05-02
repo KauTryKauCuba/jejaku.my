@@ -16,6 +16,20 @@ const ItemSchema = z.object({
   unit: z.string().default('pcs'),
 });
 
+const StockInSchema = z.object({
+  itemId: z.string().uuid('Invalid item'),
+  quantity: z.coerce.number().min(1, 'Quantity must be at least 1'),
+  locationId: z.string().uuid('Invalid location'),
+  reason: z.string().optional(),
+});
+
+const StockOutSchema = z.object({
+  itemId: z.string().uuid('Invalid item'),
+  quantity: z.coerce.number().min(1, 'Quantity must be at least 1'),
+  locationId: z.string().uuid('Invalid location'),
+  reason: z.string().optional(),
+});
+
 export async function addItem(formData: FormData) {
   const session = await getSession();
   const userId = session?.userId;
@@ -170,6 +184,152 @@ export async function deleteItem(id: string) {
   } catch (error) {
     console.error('Delete Item Error:', error);
     return { error: 'Failed to delete item' };
+  }
+}
+
+export async function stockIn(formData: FormData) {
+  const session = await getSession();
+  const userId = session?.userId;
+
+  if (!userId) return { error: 'Unauthorized' };
+
+  const currentUser = await db.query.users.findFirst({
+    where: (users, { eq }) => eq(users.id, userId),
+  });
+
+  if (!currentUser?.organizationId) return { error: 'No organization found' };
+
+  const rawData = Object.fromEntries(formData.entries());
+  const validated = StockInSchema.safeParse(rawData);
+
+  if (!validated.success) return { error: validated.error.issues[0].message };
+
+  const { itemId, quantity, locationId, reason } = validated.data;
+
+  try {
+    // 0. Verify item belongs to organization
+    const item = await db.query.items.findFirst({
+      where: and(
+        eq(items.id, itemId),
+        eq(items.organizationId, currentUser.organizationId)
+      )
+    });
+
+    if (!item) return { error: 'Item not found' };
+
+    // 1. Update or Insert Stock Level
+    const existingStock = await db.query.stockLevels.findFirst({
+      where: and(
+        eq(stockLevels.itemId, itemId),
+        eq(stockLevels.locationId, locationId)
+      )
+    });
+
+    if (existingStock) {
+      await db.update(stockLevels)
+        .set({ 
+          quantity: existingStock.quantity + quantity,
+          updatedAt: new Date()
+        })
+        .where(eq(stockLevels.id, existingStock.id));
+    } else {
+      await db.insert(stockLevels).values({
+        itemId,
+        locationId,
+        quantity,
+      });
+    }
+
+    // 2. Record Movement
+    await db.insert(stockMovements).values({
+      organizationId: currentUser.organizationId,
+      itemId,
+      userId,
+      toLocationId: locationId,
+      type: 'IN',
+      quantity,
+      reason: reason || 'Stock In',
+    });
+
+    revalidatePath('/dashboard/items');
+    revalidatePath('/dashboard');
+    revalidatePath('/dashboard/stock-in');
+    return { success: true };
+  } catch (error) {
+    console.error('Stock In Error:', error);
+    return { error: 'Failed to add stock' };
+  }
+}
+
+export async function stockOut(formData: FormData) {
+  const session = await getSession();
+  const userId = session?.userId;
+
+  if (!userId) return { error: 'Unauthorized' };
+
+  const currentUser = await db.query.users.findFirst({
+    where: (users, { eq }) => eq(users.id, userId),
+  });
+
+  if (!currentUser?.organizationId) return { error: 'No organization found' };
+
+  const rawData = Object.fromEntries(formData.entries());
+  const validated = StockOutSchema.safeParse(rawData);
+
+  if (!validated.success) return { error: validated.error.issues[0].message };
+
+  const { itemId, quantity, locationId, reason } = validated.data;
+
+  try {
+    // 0. Verify item belongs to organization
+    const item = await db.query.items.findFirst({
+      where: and(
+        eq(items.id, itemId),
+        eq(items.organizationId, currentUser.organizationId)
+      )
+    });
+
+    if (!item) return { error: 'Item not found' };
+
+    // 1. Check current stock level
+    const existingStock = await db.query.stockLevels.findFirst({
+      where: and(
+        eq(stockLevels.itemId, itemId),
+        eq(stockLevels.locationId, locationId)
+      )
+    });
+
+    if (!existingStock || existingStock.quantity < quantity) {
+      return { error: `Insufficient stock. Current quantity: ${existingStock?.quantity || 0}` };
+    }
+
+    // 2. Update Stock Level
+    await db.update(stockLevels)
+      .set({ 
+        quantity: existingStock.quantity - quantity,
+        updatedAt: new Date()
+      })
+      .where(eq(stockLevels.id, existingStock.id));
+
+    // 3. Record Movement
+    await db.insert(stockMovements).values({
+      organizationId: currentUser.organizationId,
+      itemId,
+      userId,
+      fromLocationId: locationId,
+      type: 'OUT',
+      quantity: -quantity, // Negative for OUT
+      reason: reason || 'Stock Out / Sale',
+    });
+
+    revalidatePath('/dashboard/items');
+    revalidatePath('/dashboard');
+    revalidatePath('/dashboard/stock-out');
+    revalidatePath('/dashboard/transactions');
+    return { success: true };
+  } catch (error) {
+    console.error('Stock Out Error:', error);
+    return { error: 'Failed to remove stock' };
   }
 }
 

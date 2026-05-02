@@ -23,6 +23,7 @@ import { cn } from '@/lib/utils';
 import { Modal } from '@/components/ui/Modal';
 import { AddItemForm } from './AddItemForm';
 import { EditItemForm } from './EditItemForm';
+import { ItemDetails } from './ItemDetails';
 import { deleteItem } from '@/app/actions/inventory';
 import {
   DropdownMenu,
@@ -58,6 +59,7 @@ export function ItemListClient({ initialItems, stats }: ItemListClientProps) {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<Item | null>(null);
   const [search, setSearch] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
@@ -70,6 +72,11 @@ export function ItemListClient({ initialItems, stats }: ItemListClientProps) {
   const handleEdit = (item: Item) => {
     setSelectedItem(item);
     setIsEditModalOpen(true);
+  };
+
+  const handleViewDetails = (item: Item) => {
+    setSelectedItem(item);
+    setIsDetailsModalOpen(true);
   };
 
   const handleDeleteClick = (item: Item) => {
@@ -253,7 +260,10 @@ export function ItemListClient({ initialItems, stats }: ItemListClientProps) {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end" className="w-40 rounded-xl">
                         <DropdownMenuLabel className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest px-3">Actions</DropdownMenuLabel>
-                        <DropdownMenuItem className="gap-2 px-3 py-2 cursor-pointer rounded-lg mx-1">
+                        <DropdownMenuItem 
+                          className="gap-2 px-3 py-2 cursor-pointer rounded-lg mx-1"
+                          onClick={() => handleViewDetails(item)}
+                        >
                           <Eye className="size-3.5" /> View Details
                         </DropdownMenuItem>
                         <DropdownMenuItem className="gap-2 px-3 py-2 cursor-pointer rounded-lg mx-1" onClick={() => handleEdit(item)}>
@@ -354,6 +364,21 @@ export function ItemListClient({ initialItems, stats }: ItemListClientProps) {
             </Button>
           </div>
         </div>
+      </Modal>
+
+      {/* Item Details Modal */}
+      <Modal
+        isOpen={isDetailsModalOpen}
+        onClose={() => setIsDetailsModalOpen(false)}
+        title="Product Details"
+        className="max-w-lg"
+      >
+        {selectedItem && (
+          <ItemDetails 
+            item={selectedItem} 
+            onClose={() => setIsDetailsModalOpen(false)} 
+          />
+        )}
       </Modal>
     </div>
   );
