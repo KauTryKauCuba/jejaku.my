@@ -58,7 +58,8 @@ export default async function ItemListPage() {
       stock: totalStock,
       minStock: item.minStock,
       price: `RM ${parseFloat(item.price || '0').toFixed(2)}`,
-      status
+      status,
+      unit: item.unit || 'pcs'
     };
   });
 

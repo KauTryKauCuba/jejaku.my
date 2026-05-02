@@ -12,13 +12,26 @@ import {
   AlertTriangle,
   CheckCircle2,
   List as ListIcon,
-  LayoutGrid
+  LayoutGrid,
+  Pencil,
+  Trash2,
+  Eye
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { cn } from '@/lib/utils';
 import { Modal } from '@/components/ui/Modal';
 import { AddItemForm } from './AddItemForm';
+import { EditItemForm } from './EditItemForm';
+import { deleteItem } from '@/app/actions/inventory';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/DropdownMenu";
 
 interface Item {
   id: string;
@@ -29,6 +42,7 @@ interface Item {
   minStock: number;
   price: string;
   status: string;
+  unit: string;
 }
 
 interface ItemListClientProps {
@@ -41,13 +55,40 @@ interface ItemListClientProps {
 }
 
 export function ItemListClient({ initialItems, stats }: ItemListClientProps) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<Item | null>(null);
   const [search, setSearch] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const filteredItems = initialItems.filter(item => 
     item.name.toLowerCase().includes(search.toLowerCase()) ||
     item.sku.toLowerCase().includes(search.toLowerCase())
   );
+
+  const handleEdit = (item: Item) => {
+    setSelectedItem(item);
+    setIsEditModalOpen(true);
+  };
+
+  const handleDeleteClick = (item: Item) => {
+    setSelectedItem(item);
+    setIsDeleteModalOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!selectedItem) return;
+    setIsDeleting(true);
+    const result = await deleteItem(selectedItem.id);
+    if (result.success) {
+      setIsDeleteModalOpen(false);
+      setSelectedItem(null);
+    } else {
+      alert(result.error || 'Failed to delete item');
+    }
+    setIsDeleting(false);
+  };
 
   return (
     <div className="p-4 lg:p-8 space-y-6">
@@ -64,7 +105,7 @@ export function ItemListClient({ initialItems, stats }: ItemListClientProps) {
             <Download className="size-4" />
             Export
           </Button>
-          <Button size="sm" className="h-9 gap-2 font-normal" onClick={() => setIsModalOpen(true)}>
+          <Button size="sm" className="h-9 gap-2 font-normal" onClick={() => setIsAddModalOpen(true)}>
             <Plus className="size-4" />
             Add Item
           </Button>
@@ -131,7 +172,7 @@ export function ItemListClient({ initialItems, stats }: ItemListClientProps) {
       </div>
 
       {/* Item Table */}
-      <div className="rounded-2xl border bg-card overflow-hidden shadow-sm">
+      <div className="rounded-2xl border bg-card overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
@@ -176,7 +217,7 @@ export function ItemListClient({ initialItems, stats }: ItemListClientProps) {
                   <td className="p-4">
                     <div className="space-y-1.5 max-w-[140px]">
                       <div className="flex justify-between text-[11px] font-bold">
-                        <span>{item.stock} units</span>
+                        <span>{item.stock} {item.unit || 'units'}</span>
                         <span className="text-muted-foreground">min: {item.minStock}</span>
                       </div>
                       <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden">
@@ -204,9 +245,26 @@ export function ItemListClient({ initialItems, stats }: ItemListClientProps) {
                     </span>
                   </td>
                   <td className="p-4">
-                    <Button variant="ghost" size="icon" className="h-8 w-8 rounded-lg hover:bg-background shadow-sm">
-                      <MoreHorizontal className="size-4 text-muted-foreground" />
-                    </Button>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon" className="h-8 w-8 rounded-lg hover:bg-background shadow-sm">
+                          <MoreHorizontal className="size-4 text-muted-foreground" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end" className="w-40 rounded-xl">
+                        <DropdownMenuLabel className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest px-3">Actions</DropdownMenuLabel>
+                        <DropdownMenuItem className="gap-2 px-3 py-2 cursor-pointer rounded-lg mx-1">
+                          <Eye className="size-3.5" /> View Details
+                        </DropdownMenuItem>
+                        <DropdownMenuItem className="gap-2 px-3 py-2 cursor-pointer rounded-lg mx-1" onClick={() => handleEdit(item)}>
+                          <Pencil className="size-3.5" /> Edit Item
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem className="gap-2 px-3 py-2 cursor-pointer text-destructive focus:text-destructive rounded-lg mx-1" onClick={() => handleDeleteClick(item)}>
+                          <Trash2 className="size-3.5" /> Delete Item
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </td>
                 </tr>
               )) : (
@@ -220,7 +278,7 @@ export function ItemListClient({ initialItems, stats }: ItemListClientProps) {
                         <p className="text-sm font-bold">No items found</p>
                         <p className="text-xs text-muted-foreground">Get started by adding your first product.</p>
                       </div>
-                      <Button size="sm" className="h-9 mt-2 font-normal" onClick={() => setIsModalOpen(true)}>
+                      <Button size="sm" className="h-9 mt-2 font-normal" onClick={() => setIsAddModalOpen(true)}>
                         <Plus className="size-4 mr-2" /> Add Your First Item
                       </Button>
                     </div>
@@ -234,14 +292,68 @@ export function ItemListClient({ initialItems, stats }: ItemListClientProps) {
 
       {/* Add Item Modal */}
       <Modal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
+        isOpen={isAddModalOpen} 
+        onClose={() => setIsAddModalOpen(false)} 
         title="Add New Product"
       >
         <AddItemForm 
-          onSuccess={() => setIsModalOpen(false)} 
-          onCancel={() => setIsModalOpen(false)} 
+          onSuccess={() => setIsAddModalOpen(false)} 
+          onCancel={() => setIsAddModalOpen(false)} 
         />
+      </Modal>
+
+      {/* Edit Item Modal */}
+      <Modal 
+        isOpen={isEditModalOpen} 
+        onClose={() => setIsEditModalOpen(false)} 
+        title="Edit Product"
+      >
+        {selectedItem && (
+          <EditItemForm 
+            item={selectedItem}
+            onSuccess={() => {
+              setIsEditModalOpen(false);
+              setSelectedItem(null);
+            }} 
+            onCancel={() => {
+              setIsEditModalOpen(false);
+              setSelectedItem(null);
+            }} 
+          />
+        )}
+      </Modal>
+
+      {/* Delete Confirmation Modal */}
+      <Modal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        title="Delete Item"
+        className="max-w-md"
+      >
+        <div className="space-y-4">
+          <p className="text-sm text-muted-foreground leading-relaxed">
+            Are you sure you want to delete <span className="font-bold text-foreground">{selectedItem?.name}</span>? 
+            This action cannot be undone and will remove all associated stock data.
+          </p>
+          <div className="flex items-center justify-end gap-3 pt-2">
+            <Button 
+              variant="outline" 
+              onClick={() => setIsDeleteModalOpen(false)}
+              disabled={isDeleting}
+              className="rounded-xl h-10 font-normal"
+            >
+              Cancel
+            </Button>
+            <Button 
+              variant="destructive" 
+              onClick={confirmDelete}
+              disabled={isDeleting}
+              className="rounded-xl h-10 px-6 font-normal"
+            >
+              {isDeleting ? 'Deleting...' : 'Delete Item'}
+            </Button>
+          </div>
+        </div>
       </Modal>
     </div>
   );

@@ -1,7 +1,7 @@
 'use server';
 
 import { db } from '@/db';
-import { users, organizations } from '@/db/schema';
+import { users, organizations, locations } from '@/db/schema';
 import { hash } from 'bcryptjs';
 import { z } from 'zod';
 import { redirect } from 'next/navigation';
@@ -129,7 +129,14 @@ export async function completeOnboarding(formData: FormData) {
       industry: industry,
     }).returning();
 
-    // 2. Update user to link to organization
+    // 2. Create a default location for the new organization
+    await db.insert(locations).values({
+      organizationId: newOrg.id,
+      name: 'Default Warehouse',
+      isDefault: true,
+    });
+
+    // 3. Update user to link to organization
     await db.update(users)
       .set({
         organizationId: newOrg.id,

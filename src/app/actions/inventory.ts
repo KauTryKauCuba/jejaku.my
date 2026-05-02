@@ -5,7 +5,7 @@ import { items, stockMovements, stockLevels, locations } from '@/db/schema';
 import { getSession } from '@/lib/session';
 import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
-import { eq, and } from 'drizzle-orm';
+import { eq, and, sql } from 'drizzle-orm';
 
 const ItemSchema = z.object({
   name: z.string().min(2, 'Name is too short'),
@@ -24,11 +24,6 @@ export async function addItem(formData: FormData) {
     return { error: 'Unauthorized' };
   }
 
-  const user = await db.query.users.findFirst({
-    where: eq(items.id, userId), // Wait, users.id not items.id
-  });
-  
-  // Re-fetch user properly
   const currentUser = await db.query.users.findFirst({
     where: (users, { eq }) => eq(users.id, userId),
   });
@@ -87,9 +82,94 @@ export async function addItem(formData: FormData) {
     }
 
     revalidatePath('/dashboard/items');
+    revalidatePath('/dashboard');
     return { success: true, item: newItem };
   } catch (error) {
     console.error('Add Item Error:', error);
     return { error: 'Failed to add item' };
   }
 }
+
+export async function updateItem(id: string, formData: FormData) {
+  const session = await getSession();
+  const userId = session?.userId;
+
+  if (!userId) return { error: 'Unauthorized' };
+
+  const currentUser = await db.query.users.findFirst({
+    where: (users, { eq }) => eq(users.id, userId),
+  });
+
+  if (!currentUser?.organizationId) return { error: 'No organization found' };
+
+  const rawData = Object.fromEntries(formData.entries());
+  const validated = ItemSchema.safeParse(rawData);
+
+  if (!validated.success) return { error: validated.error.issues[0].message };
+
+  const { name, sku, categoryId, price, minStock, unit } = validated.data;
+
+  try {
+    // Check SKU uniqueness (excluding current item)
+    const existing = await db.query.items.findFirst({
+      where: and(
+        eq(items.organizationId, currentUser.organizationId),
+        eq(items.sku, sku),
+        sql`${items.id} != ${id}`
+      )
+    });
+
+    if (existing) return { error: 'SKU already exists in your inventory' };
+
+    await db.update(items)
+      .set({
+        name,
+        sku,
+        categoryId: categoryId || null,
+        price,
+        minStock,
+        unit,
+        updatedAt: new Date(),
+      })
+      .where(and(
+        eq(items.id, id),
+        eq(items.organizationId, currentUser.organizationId)
+      ));
+
+    revalidatePath('/dashboard/items');
+    revalidatePath('/dashboard');
+    return { success: true };
+  } catch (error) {
+    console.error('Update Item Error:', error);
+    return { error: 'Failed to update item' };
+  }
+}
+
+export async function deleteItem(id: string) {
+  const session = await getSession();
+  const userId = session?.userId;
+
+  if (!userId) return { error: 'Unauthorized' };
+
+  const currentUser = await db.query.users.findFirst({
+    where: (users, { eq }) => eq(users.id, userId),
+  });
+
+  if (!currentUser?.organizationId) return { error: 'No organization found' };
+
+  try {
+    await db.delete(items)
+      .where(and(
+        eq(items.id, id),
+        eq(items.organizationId, currentUser.organizationId)
+      ));
+
+    revalidatePath('/dashboard/items');
+    revalidatePath('/dashboard');
+    return { success: true };
+  } catch (error) {
+    console.error('Delete Item Error:', error);
+    return { error: 'Failed to delete item' };
+  }
+}
+

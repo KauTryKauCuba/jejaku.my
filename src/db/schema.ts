@@ -73,11 +73,11 @@ export const stockLevels = pgTable('stock_levels', {
 export const stockMovements = pgTable('stock_movements', {
   id: uuid('id').primaryKey().defaultRandom(),
   organizationId: uuid('organization_id').references(() => organizations.id).notNull(),
-  itemId: uuid('item_id').references(() => items.id).notNull(),
+  itemId: uuid('item_id').references(() => items.id, { onDelete: 'cascade' }).notNull(),
   userId: uuid('user_id').references(() => users.id),
   fromLocationId: uuid('from_location_id').references(() => locations.id),
   toLocationId: uuid('to_location_id').references(() => locations.id),
-  type: text('type').notNull(), // using text instead of enum for simplicity in early phase if needed, but typed as movementTypeEnum in code
+  type: text('type').notNull(), // IN, OUT, ADJUST, MOVE
   quantity: integer('quantity').notNull(),
   reason: text('reason'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
