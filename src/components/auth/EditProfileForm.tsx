@@ -36,7 +36,7 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
   }, null);
 
   return (
-    <form action={action} className="space-y-6 max-w-2xl">
+    <form action={action} className="space-y-5 max-w-2xl">
       {state?.error && (
         <div className="p-3 text-sm font-medium text-destructive bg-destructive/10 rounded-lg text-center">
           {state.error}
@@ -50,7 +50,7 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
         </div>
       )}
       
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         <div className="space-y-2">
           <Label htmlFor="name">Full Name</Label>
           <div className="relative">
@@ -156,7 +156,7 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
         <Button 
           type="submit"
           disabled={isPending}
-          className="px-8 h-11 rounded-xl text-sm bg-primary text-primary-foreground hover:opacity-90 !transition-none"
+          className="px-6 h-10 rounded-xl text-sm bg-primary text-primary-foreground hover:opacity-90 !transition-none"
         >
           {isPending ? (
             <>

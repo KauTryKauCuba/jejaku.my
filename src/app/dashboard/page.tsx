@@ -33,11 +33,11 @@ export default async function DashboardPage() {
   }
 
   return (
-    <div className="p-6 lg:p-10 space-y-8">
+    <div className="p-4 lg:p-8 space-y-6">
       {/* Header Section */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Overview</h1>
+          <h1 className="text-2xl font-bold tracking-tight">Overview</h1>
           <p className="text-muted-foreground mt-1">
             Welcome back to <span className="font-semibold text-foreground">{user.organizationName}</span>'s inventory.
           </p>
@@ -56,7 +56,7 @@ export default async function DashboardPage() {
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="group p-6 rounded-2xl border bg-card/50 backdrop-blur-sm">
+        <div className="group p-5 rounded-2xl border bg-card">
           <div className="flex items-center justify-between mb-3">
             <div className="p-2 rounded-xl bg-primary/10 text-primary group-hover:scale-110">
               <Package className="size-5" />
@@ -69,7 +69,7 @@ export default async function DashboardPage() {
           <p className="text-2xl font-bold mt-1">124</p>
         </div>
 
-        <div className="group p-6 rounded-2xl border bg-card/50 backdrop-blur-sm">
+        <div className="group p-5 rounded-2xl border bg-card">
           <div className="flex items-center justify-between mb-3">
             <div className="p-2 rounded-xl bg-orange-500/10 text-orange-500 group-hover:scale-110">
               <DollarSign className="size-5" />
@@ -82,7 +82,7 @@ export default async function DashboardPage() {
           <p className="text-2xl font-bold mt-1">RM 12,450.00</p>
         </div>
 
-        <div className="group p-6 rounded-2xl border bg-card/50 backdrop-blur-sm">
+        <div className="group p-5 rounded-2xl border bg-card">
           <div className="flex items-center justify-between mb-3">
             <div className="p-2 rounded-xl bg-amber-500/10 text-amber-500 group-hover:scale-110">
               <AlertTriangle className="size-5" />
@@ -95,7 +95,7 @@ export default async function DashboardPage() {
           <p className="text-2xl font-bold mt-1">8</p>
         </div>
 
-        <div className="group p-6 rounded-2xl border bg-card/50 backdrop-blur-sm">
+        <div className="group p-5 rounded-2xl border bg-card">
           <div className="flex items-center justify-between mb-3">
             <div className="p-2 rounded-xl bg-destructive/10 text-destructive group-hover:scale-110">
               <Package className="size-5" />
@@ -109,7 +109,7 @@ export default async function DashboardPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Recent Activity */}
         <div className="lg:col-span-2 space-y-6">
           <div className="flex items-center justify-between">
@@ -122,7 +122,7 @@ export default async function DashboardPage() {
             </Button>
           </div>
 
-          <div className="rounded-2xl border bg-card/30 backdrop-blur-sm overflow-hidden">
+          <div className="rounded-2xl border bg-card overflow-hidden">
             <div className="divide-y border-t-0">
               {[
                 { name: 'Mechanical Keyboard K3', type: 'Restock', qty: '+50', time: '2 hours ago', status: 'increase' },
@@ -156,7 +156,7 @@ export default async function DashboardPage() {
         </div>
 
         {/* Quick Actions & Tips */}
-        <div className="space-y-8">
+        <div className="space-y-6">
           <div className="space-y-4">
             <h2 className="text-lg font-bold">Quick Actions</h2>
             <div className="grid grid-cols-1 gap-3">
@@ -181,7 +181,7 @@ export default async function DashboardPage() {
             </div>
           </div>
 
-          <div className="p-6 rounded-2xl bg-primary/5 border border-primary/20 relative overflow-hidden group">
+          <div className="p-5 rounded-2xl bg-primary/5 border border-primary/20 relative overflow-hidden group">
              <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20">
                 <TrendingUp className="size-20 rotate-12" />
              </div>

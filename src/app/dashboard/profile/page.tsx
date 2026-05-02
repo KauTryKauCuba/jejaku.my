@@ -24,18 +24,17 @@ export default async function ProfilePage() {
   }
 
   return (
-    <div className="p-6 lg:p-10 space-y-8">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight flex items-center gap-3">
-          <UserCircle className="size-8 text-primary" />
-          Edit Profile
-        </h1>
-        <p className="text-muted-foreground mt-1">
-          Update your personal information and organization details.
-        </p>
+    <div className="p-4 lg:p-8 space-y-6">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight">Edit Profile</h1>
+          <p className="text-muted-foreground mt-1">
+            Update your personal information and organization details.
+          </p>
+        </div>
       </div>
 
-      <div className="rounded-2xl border bg-card/50 backdrop-blur-sm p-6 lg:p-8">
+      <div className="rounded-2xl border bg-card p-6">
         <EditProfileForm user={{
           name: user.name,
           email: user.email,

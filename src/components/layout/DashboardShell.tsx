@@ -29,7 +29,7 @@ export function DashboardShell({ user, children }: DashboardShellProps) {
           user={user} 
           onMenuClick={() => setIsMobileOpen(true)} 
         />
-        <div className="flex-1">
+        <div className="flex-1 bg-dot-grid">
           {children}
         </div>
       </main>
