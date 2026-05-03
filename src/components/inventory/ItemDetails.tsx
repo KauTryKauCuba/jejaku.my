@@ -139,7 +139,7 @@ export function ItemDetails({ item, onClose }: ItemDetailsProps) {
       </div>
 
       <div className="pt-2">
-        <Button onClick={onClose} className="w-full h-11 rounded-xl font-bold shadow-lg shadow-primary/20">
+        <Button onClick={onClose} className="w-full h-11 rounded-xl font-bold transition-all">
           Close Details
         </Button>
       </div>

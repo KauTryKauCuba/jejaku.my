@@ -114,7 +114,7 @@ export function ItemListClient({ initialItems, stats }: ItemListClientProps) {
           </Button>
           <Button size="sm" className="h-9 gap-2 font-normal" onClick={() => setIsAddModalOpen(true)}>
             <Plus className="size-4" />
-            Add Item
+            Add Product
           </Button>
         </div>
       </div>
@@ -350,7 +350,7 @@ export function ItemListClient({ initialItems, stats }: ItemListClientProps) {
               variant="outline" 
               onClick={() => setIsDeleteModalOpen(false)}
               disabled={isDeleting}
-              className="rounded-xl h-10 font-normal"
+              className="rounded-xl h-11 font-normal"
             >
               Cancel
             </Button>
@@ -358,7 +358,7 @@ export function ItemListClient({ initialItems, stats }: ItemListClientProps) {
               variant="destructive" 
               onClick={confirmDelete}
               disabled={isDeleting}
-              className="rounded-xl h-10 px-6 font-normal"
+              className="rounded-xl h-11 px-6 font-normal"
             >
               {isDeleting ? 'Deleting...' : 'Delete Item'}
             </Button>

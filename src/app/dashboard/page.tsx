@@ -83,7 +83,7 @@ export default async function DashboardPage() {
   return (
     <div className="p-4 lg:p-8 space-y-6">
       {/* Header Section */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-[22px] font-bold tracking-tight">Overview</h1>
           <p className="text-muted-foreground mt-1 text-sm font-normal">
