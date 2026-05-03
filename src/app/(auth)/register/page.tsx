@@ -26,7 +26,7 @@ export default function RegisterPage() {
 
       <div className="mb-4">
         <Link href="/">
-          <Logo className="h-5" />
+          <Logo />
         </Link>
       </div>
 

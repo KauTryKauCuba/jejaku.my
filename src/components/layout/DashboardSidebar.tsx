@@ -208,7 +208,7 @@ export function DashboardSidebar({ user, isMobileOpen, setIsMobileOpen }: Dashbo
       >
         <div className="p-4 border-b flex items-center h-14 relative justify-between">
           <Link href="/" className={cn("flex-1", (isCollapsed && !isMobileOpen) && "hidden")}>
-            <Logo className="h-4" />
+            <Logo />
           </Link>
           <button 
             onClick={() => isMobileOpen ? setIsMobileOpen?.(false) : setIsCollapsed(!isCollapsed)}
