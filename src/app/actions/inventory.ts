@@ -1,7 +1,7 @@
 'use server';
 
 import { db } from '@/db';
-import { items, stockMovements, stockLevels, locations } from '@/db/schema';
+import { items, stockMovements, stockLevels, locations, itemUnits } from '@/db/schema';
 import { getSession } from '@/lib/session';
 import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
@@ -38,6 +38,7 @@ const ItemSchema = z.object({
   name: z.string().min(2, 'Name is too short'),
   sku: z.string().min(2, 'SKU is required'),
   categoryId: z.string().uuid().optional().nullable(),
+  trackingType: z.enum(['QUANTITY', 'SERIALIZED']).default('QUANTITY'),
   price: z.string().regex(/^\d+(\.\d{1,2})?$/, 'Invalid price format'),
   minStock: z.coerce.number().min(0),
   unit: z.string().default('pcs'),
@@ -50,6 +51,7 @@ const StockInSchema = z.object({
   quantity: z.coerce.number().min(1, 'Quantity must be at least 1'),
   locationId: z.string().uuid('Invalid location'),
   reason: z.string().optional(),
+  serialNumbers: z.string().optional(), // Comma separated serials
 });
 
 const StockOutSchema = z.object({
@@ -57,6 +59,7 @@ const StockOutSchema = z.object({
   quantity: z.coerce.number().min(1, 'Quantity must be at least 1'),
   locationId: z.string().uuid('Invalid location'),
   reason: z.string().optional(),
+  unitIds: z.string().optional(), // Comma separated unit IDs for serialized items
 });
 
 export async function addItem(formData: FormData) {
@@ -116,6 +119,7 @@ export async function addItem(formData: FormData) {
       categoryId: categoryId || null,
       name,
       sku,
+      trackingType: (rawData.trackingType as any) || 'QUANTITY',
       price,
       minStock,
       unit,
@@ -193,6 +197,7 @@ export async function updateItem(id: string, formData: FormData) {
         name,
         sku,
         categoryId: categoryId || null,
+        trackingType: (rawData.trackingType as any) || 'QUANTITY',
         price,
         minStock,
         unit,
@@ -258,7 +263,7 @@ export async function stockIn(formData: FormData) {
 
   if (!validated.success) return { error: validated.error.issues[0].message };
 
-  const { itemId, quantity, locationId, reason } = validated.data;
+  const { itemId, quantity, locationId, reason, serialNumbers } = validated.data;
 
   try {
     // 0. Verify item belongs to organization
@@ -271,7 +276,37 @@ export async function stockIn(formData: FormData) {
 
     if (!item) return { error: 'Item not found' };
 
-    // 1. Update or Insert Stock Level
+    // 1. Handle Serialized Items
+    if (item.trackingType === 'SERIALIZED') {
+      const serials = serialNumbers?.split(',').map(s => s.trim()).filter(Boolean) || [];
+      if (serials.length !== quantity) {
+        return { error: `Please provide exactly ${quantity} serial numbers.` };
+      }
+
+      // Check for duplicate serials in this item
+      const existingSerials = await db.query.itemUnits.findMany({
+        where: and(
+          eq(itemUnits.itemId, itemId),
+          inArray(itemUnits.serialNumber, serials)
+        )
+      });
+
+      if (existingSerials.length > 0) {
+        return { error: `Serial number(s) already exist: ${existingSerials.map(s => s.serialNumber).join(', ')}` };
+      }
+
+      // Create unit records
+      for (const sn of serials) {
+        await db.insert(itemUnits).values({
+          itemId,
+          locationId,
+          serialNumber: sn,
+          status: 'AVAILABLE',
+        });
+      }
+    }
+
+    // 2. Update or Insert Stock Level
     const existingStock = await db.query.stockLevels.findFirst({
       where: and(
         eq(stockLevels.itemId, itemId),
@@ -294,7 +329,7 @@ export async function stockIn(formData: FormData) {
       });
     }
 
-    // 2. Record Movement
+    // 3. Record Movement
     await db.insert(stockMovements).values({
       organizationId: currentUser.organizationId,
       itemId,
@@ -332,7 +367,7 @@ export async function stockOut(formData: FormData) {
 
   if (!validated.success) return { error: validated.error.issues[0].message };
 
-  const { itemId, quantity, locationId, reason } = validated.data;
+  const { itemId, quantity, locationId, reason, unitIds } = validated.data;
 
   try {
     // 0. Verify item belongs to organization
@@ -345,7 +380,23 @@ export async function stockOut(formData: FormData) {
 
     if (!item) return { error: 'Item not found' };
 
-    // 1. Check current stock level
+    // 1. Handle Serialized Items
+    if (item.trackingType === 'SERIALIZED') {
+      const ids = unitIds?.split(',').map(id => id.trim()).filter(Boolean) || [];
+      if (ids.length !== quantity) {
+        return { error: `Please select exactly ${quantity} units.` };
+      }
+
+      // Update unit status
+      await db.update(itemUnits)
+        .set({ status: 'SOLD', updatedAt: new Date() })
+        .where(and(
+          inArray(itemUnits.id, ids),
+          eq(itemUnits.itemId, itemId)
+        ));
+    }
+
+    // 2. Check current stock level
     const existingStock = await db.query.stockLevels.findFirst({
       where: and(
         eq(stockLevels.itemId, itemId),
@@ -357,7 +408,7 @@ export async function stockOut(formData: FormData) {
       return { error: `Insufficient stock. Current quantity: ${existingStock?.quantity || 0}` };
     }
 
-    // 2. Update Stock Level
+    // 3. Update Stock Level
     await db.update(stockLevels)
       .set({ 
         quantity: existingStock.quantity - quantity,
@@ -365,7 +416,7 @@ export async function stockOut(formData: FormData) {
       })
       .where(eq(stockLevels.id, existingStock.id));
 
-    // 3. Record Movement
+    // 4. Record Movement
     await db.insert(stockMovements).values({
       organizationId: currentUser.organizationId,
       itemId,

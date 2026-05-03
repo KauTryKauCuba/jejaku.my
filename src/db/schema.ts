@@ -3,6 +3,8 @@ import { relations } from 'drizzle-orm';
 
 // Enums for movement types
 export const movementTypeEnum = pgEnum('movement_type', ['IN', 'OUT', 'ADJUST', 'MOVE']);
+export const trackingTypeEnum = pgEnum('tracking_type', ['QUANTITY', 'SERIALIZED']);
+export const unitStatusEnum = pgEnum('unit_status', ['AVAILABLE', 'SOLD', 'DAMAGED', 'MAINTENANCE', 'RESERVED']);
 
 // Organizations Table
 export const organizations = pgTable('organizations', {
@@ -46,6 +48,7 @@ export const items = pgTable('items', {
   price: decimal('price', { precision: 12, scale: 2 }).default('0.00'),
   minStock: integer('min_stock').default(0).notNull(),
   unit: text('unit').default('pcs').notNull(), // pcs, kg, box, etc.
+  trackingType: text('tracking_type').default('QUANTITY').notNull(), // QUANTITY or SERIALIZED
   imageUrl: text('image_url'),
   qrCode: text('qr_code').unique(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
@@ -60,6 +63,17 @@ export const locations = pgTable('locations', {
   address: text('address'),
   isDefault: boolean('is_default').default(false).notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
+});
+
+// Individual Units for Serialized Tracking
+export const itemUnits = pgTable('item_units', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  itemId: uuid('item_id').references(() => items.id, { onDelete: 'cascade' }).notNull(),
+  locationId: uuid('location_id').references(() => locations.id).notNull(),
+  serialNumber: text('serial_number').notNull(),
+  status: text('status').default('AVAILABLE').notNull(), // AVAILABLE, SOLD, DAMAGED, etc.
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
 
 // Stock Levels (Current quantity per item per location)
@@ -96,6 +110,12 @@ export const itemsRelations = relations(items, ({ one, many }) => ({
   organization: one(organizations, { fields: [items.organizationId], references: [organizations.id] }),
   category: one(categories, { fields: [items.categoryId], references: [categories.id] }),
   stockLevels: many(stockLevels),
+  units: many(itemUnits),
+}));
+
+export const itemUnitsRelations = relations(itemUnits, ({ one }) => ({
+  item: one(items, { fields: [itemUnits.itemId], references: [items.id] }),
+  location: one(locations, { fields: [itemUnits.locationId], references: [locations.id] }),
 }));
 
 export const stockLevelsRelations = relations(stockLevels, ({ one }) => ({

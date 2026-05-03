@@ -26,6 +26,13 @@ interface Item {
   unit: string;
   imageUrl: string | null;
   qrCode: string | null;
+  trackingType: string;
+  units?: {
+    id: string;
+    serialNumber: string;
+    status: string;
+    location: string;
+  }[];
 }
 
 interface ItemDetailsProps {
@@ -144,10 +151,45 @@ export function ItemDetails({ item, onClose }: ItemDetailsProps) {
         </div>
       </div>
       
+      {/* Serialized Units List */}
+      {item.trackingType === 'SERIALIZED' && (
+        <div className="space-y-3">
+          <div className="flex items-center justify-between px-1">
+            <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Individual Units ({item.units?.length})</h4>
+            <span className="text-[10px] font-bold text-emerald-500">Available: {item.units?.filter(u => u.status === 'AVAILABLE').length}</span>
+          </div>
+          <div className="border rounded-2xl overflow-hidden bg-muted/20 divide-y max-h-60 overflow-y-auto custom-scrollbar">
+            {item.units && item.units.length > 0 ? (
+              item.units.map((unit) => (
+                <div key={unit.id} className="p-3 flex items-center justify-between group hover:bg-background transition-colors">
+                  <div className="flex flex-col">
+                    <span className="text-xs font-mono font-bold">{unit.serialNumber}</span>
+                    <div className="flex items-center gap-2 mt-0.5">
+                      <MapPin className="size-3 text-muted-foreground" />
+                      <span className="text-[10px] text-muted-foreground">{unit.location}</span>
+                    </div>
+                  </div>
+                  <span className={cn(
+                    "text-[9px] font-bold px-1.5 py-0.5 rounded-md uppercase tracking-tight",
+                    unit.status === 'AVAILABLE' ? "bg-emerald-500/10 text-emerald-500" : "bg-muted text-muted-foreground"
+                  )}>
+                    {unit.status}
+                  </span>
+                </div>
+              ))
+            ) : (
+              <div className="p-8 text-center">
+                <p className="text-xs text-muted-foreground font-medium">No units registered yet.</p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* QR Code Section */}
       {item.qrCode && (
         <div className="space-y-3">
-          <h4 className="text-xs font-bold text-muted-foreground px-1">Product QR Label</h4>
+          <h4 className="text-xs font-bold text-muted-foreground px-1 uppercase tracking-wider">Product QR Label</h4>
           <div className="flex items-center gap-4 p-4 rounded-2xl bg-white border border-border/40 shadow-sm">
             <div className="size-20 bg-white p-1 border rounded-lg shrink-0">
               <img 

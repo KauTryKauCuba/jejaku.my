@@ -48,7 +48,9 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
+  { name: 'Categories', href: '/dashboard/categories', icon: Tag },
   { name: 'Item List', href: '/dashboard/items', icon: List },
+  { name: 'Individual Units', href: '/dashboard/units', icon: Barcode },
   { name: 'Stock In', href: '/dashboard/stock-in', icon: ArrowDownLeft },
   { name: 'Stock Out', href: '/dashboard/stock-out', icon: ArrowUpRight },
   { name: 'Adjust Stock', href: '/dashboard/adjust', icon: Settings2 },

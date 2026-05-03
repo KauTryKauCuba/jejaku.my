@@ -24,15 +24,33 @@ import {
 } from '@/components/ui/Select';
 
 interface StockInFormProps {
-  items: { id: string; name: string; sku: string }[];
+  items: { id: string; name: string; sku: string; trackingType?: string }[];
   locations: { id: string; name: string }[];
   onSuccess?: () => void;
 }
 
 export function StockInForm({ items, locations, onSuccess }: StockInFormProps) {
+  const [selectedItemId, setSelectedItemId] = useState<string>("");
+  const [quantity, setQuantity] = useState<number>(0);
+  const [serials, setSerials] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+
+  const selectedItem = items.find(i => i.id === selectedItemId);
+  const isSerialized = selectedItem?.trackingType === 'SERIALIZED';
+
+  const handleSerialChange = (index: number, value: string) => {
+    const newSerials = [...serials];
+    newSerials[index] = value;
+    setSerials(newSerials);
+  };
+
+  React.useEffect(() => {
+    if (isSerialized) {
+      setSerials(new Array(quantity || 0).fill(""));
+    }
+  }, [isSerialized, quantity]);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -85,7 +103,8 @@ export function StockInForm({ items, locations, onSuccess }: StockInFormProps) {
               <Select 
                 name="itemId"
                 required 
-                defaultValue=""
+                onValueChange={setSelectedItemId}
+                defaultValue={selectedItemId}
               >
                 <SelectTrigger className="pl-10 h-12 rounded-2xl border bg-card/50 !transition-none">
                   <SelectValue placeholder="Choose an item..." />
@@ -141,6 +160,7 @@ export function StockInForm({ items, locations, onSuccess }: StockInFormProps) {
               min="1"
               placeholder="0" 
               required 
+              onChange={(e) => setQuantity(parseInt(e.target.value) || 0)}
               className="h-11 rounded-2xl bg-card/50 border-border/60 focus:ring-primary/20 text-lg font-bold"
             />
           </div>
@@ -158,6 +178,37 @@ export function StockInForm({ items, locations, onSuccess }: StockInFormProps) {
             />
           </div>
         </div>
+
+        {/* Serial Numbers (Only if Serialized) */}
+        {isSerialized && quantity > 0 && (
+          <div className="space-y-4 p-5 rounded-2xl border bg-primary/5 border-primary/20 animate-in zoom-in-95 duration-200">
+            <div className="flex items-center gap-2 text-primary">
+              <Info className="size-4" />
+              <p className="text-xs font-bold uppercase tracking-tight">Enter Serial Numbers ({quantity})</p>
+            </div>
+            <div className="space-y-2">
+              <Label className="text-[10px] font-bold text-muted-foreground ml-1">Paste serial numbers (one per line or comma separated)</Label>
+              <textarea 
+                name="serialNumbers"
+                placeholder="SN-001&#10;SN-002&#10;SN-003..."
+                required
+                rows={5}
+                className="w-full rounded-xl bg-background border border-primary/20 focus:ring-1 focus:ring-primary/30 p-3 font-mono text-xs outline-none"
+                onChange={(e) => {
+                  const val = e.target.value;
+                  const lines = val.split(/[\n,]/).map(s => s.trim()).filter(Boolean);
+                  setSerials(lines);
+                }}
+              />
+              <p className={cn(
+                "text-[10px] font-bold",
+                serials.length === quantity ? "text-emerald-500" : "text-amber-500"
+              )}>
+                {serials.length} of {quantity} serials entered
+              </p>
+            </div>
+          </div>
+        )}
 
         <div className="pt-4">
           <Button 

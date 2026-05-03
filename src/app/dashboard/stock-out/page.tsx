@@ -42,6 +42,9 @@ export default async function StockOutPage() {
     where: eq(items.organizationId, user.organizationId),
     with: {
       stockLevels: true,
+      units: {
+        where: (units, { eq }) => eq(units.status, 'AVAILABLE'),
+      },
     },
     orderBy: (items, { asc }) => [asc(items.name)],
   });

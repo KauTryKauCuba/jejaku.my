@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
 import { db } from '@/db';
-import { users, organizations, items, stockLevels, stockMovements } from '@/db/schema';
+import { users, organizations, items, stockLevels, stockMovements, locations } from '@/db/schema';
 import { eq, desc, and } from 'drizzle-orm';
 import { getSession } from '@/lib/session';
 import { 
@@ -17,6 +17,7 @@ import {
 import { Button } from '@/components/ui/Button';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
+import { DashboardQuickActions } from '@/components/dashboard/DashboardQuickActions';
 
 export default async function DashboardPage() {
   const session = await getSession();
@@ -60,18 +61,27 @@ export default async function DashboardPage() {
     orderBy: [desc(stockMovements.createdAt)],
   });
 
+  const dbLocations = await db.query.locations.findMany({
+    where: eq(locations.organizationId, orgId),
+  });
+
   // 3. Calculate Stats
   const totalProducts = dbItems.length;
   
   let totalStockValue = 0;
   let lowStockCount = 0;
   let outOfStockCount = 0;
+  let totalSerializedUnits = 0;
 
   dbItems.forEach(item => {
     const totalQty = item.stockLevels.reduce((sum, sl) => sum + sl.quantity, 0);
     const price = parseFloat(item.price || '0');
     
     totalStockValue += totalQty * price;
+
+    if (item.trackingType === 'SERIALIZED') {
+      totalSerializedUnits += totalQty;
+    }
 
     if (totalQty === 0) {
       outOfStockCount++;
@@ -106,6 +116,8 @@ export default async function DashboardPage() {
         </div>
       </div>
 
+      <DashboardQuickActions items={dbItems} locations={dbLocations} />
+
       {/* Stats Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="group p-5 rounded-2xl border bg-card">
@@ -118,7 +130,14 @@ export default async function DashboardPage() {
             </span>
           </div>
           <p className="text-xs font-medium text-muted-foreground ">Total Products</p>
-          <p className="text-[22px] font-bold mt-1">{totalProducts}</p>
+          <div className="flex items-baseline gap-3 mt-1">
+            <p className="text-[22px] font-bold">{totalProducts}</p>
+            {totalSerializedUnits > 0 && (
+              <p className="text-[10px] font-bold text-primary px-1.5 py-0.5 bg-primary/5 rounded-md border border-primary/10">
+                {totalSerializedUnits} Serialized Units
+              </p>
+            )}
+          </div>
         </div>
 
         <div className="group p-5 rounded-2xl border bg-card">

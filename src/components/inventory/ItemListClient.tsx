@@ -26,6 +26,7 @@ import { EditItemForm } from './EditItemForm';
 import { ItemDetails } from './ItemDetails';
 import { deleteItem, bulkDeleteItems } from '@/app/actions/inventory';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -47,10 +48,13 @@ interface Item {
   unit: string;
   imageUrl: string | null;
   qrCode: string | null;
+  trackingType: string;
+  categoryId?: string | null;
 }
 
 interface ItemListClientProps {
   initialItems: Item[];
+  categories: { id: string, name: string }[];
   stats: {
     total: number;
     lowStock: number;
@@ -58,7 +62,7 @@ interface ItemListClientProps {
   };
 }
 
-export function ItemListClient({ initialItems, stats }: ItemListClientProps) {
+export function ItemListClient({ initialItems, categories, stats }: ItemListClientProps) {
   const router = useRouter();
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -290,10 +294,20 @@ export function ItemListClient({ initialItems, stats }: ItemListClientProps) {
                           <Package className="size-5 text-muted-foreground/40" />
                         )}
                       </div>
-                      <div>
-                        <p className="text-sm font-semibold group-hover:text-primary transition-colors">{item.name}</p>
-                        <p className="text-[11px] text-muted-foreground font-medium">{item.sku}</p>
+                    <div className="flex flex-col">
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-semibold group-hover:text-primary transition-colors">{item.name}</span>
+                        {item.trackingType === 'SERIALIZED' && (
+                          <Link 
+                            href={`/dashboard/units?search=${item.sku}`}
+                            className="px-1.5 py-0.5 rounded-md bg-primary/10 text-[9px] font-bold text-primary hover:bg-primary hover:text-white transition-colors"
+                          >
+                            Serialized
+                          </Link>
+                        )}
                       </div>
+                      <p className="text-[11px] text-muted-foreground font-medium">{item.sku}</p>
+                    </div>
                     </div>
                   </td>
                   <td className="p-4">
@@ -401,6 +415,7 @@ export function ItemListClient({ initialItems, stats }: ItemListClientProps) {
         title="Add New Product"
       >
         <AddItemForm 
+          categories={categories}
           onSuccess={() => setIsAddModalOpen(false)} 
           onCancel={() => setIsAddModalOpen(false)} 
         />
@@ -415,6 +430,7 @@ export function ItemListClient({ initialItems, stats }: ItemListClientProps) {
         {selectedItem && (
           <EditItemForm 
             item={selectedItem}
+            categories={categories}
             onSuccess={() => {
               setIsEditModalOpen(false);
               setSelectedItem(null);

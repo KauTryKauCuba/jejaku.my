@@ -23,12 +23,22 @@ export default async function ItemListPage() {
     redirect('/onboarding');
   }
 
-  // Fetch real items with their stock levels and categories
+  // Fetch categories for the dropdowns
+  const dbCategories = await db.query.categories.findMany({
+    where: eq(categories.organizationId, user.organizationId),
+    orderBy: (categories, { asc }) => [asc(categories.name)],
+  });
+
   const dbItems = await db.query.items.findMany({
     where: eq(items.organizationId, user.organizationId),
     with: {
       category: true,
       stockLevels: true,
+      units: {
+        with: {
+          location: true,
+        }
+      },
     },
     orderBy: (items, { desc }) => [desc(items.createdAt)],
   });
@@ -63,12 +73,21 @@ export default async function ItemListPage() {
       unit: item.unit || 'pcs',
       imageUrl: item.imageUrl,
       qrCode: item.qrCode,
+      categoryId: item.categoryId,
+      trackingType: item.trackingType,
+      units: item.units?.map(u => ({
+        id: u.id,
+        serialNumber: u.serialNumber,
+        status: u.status,
+        location: u.location?.name || 'Unknown'
+      })) || []
     };
   });
 
   return (
     <ItemListClient 
       initialItems={formattedItems} 
+      categories={dbCategories.map(c => ({ id: c.id, name: c.name }))}
       stats={{
         total: totalItems,
         lowStock: lowStockCount,

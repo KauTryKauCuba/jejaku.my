@@ -8,11 +8,12 @@ import { addItem } from '@/app/actions/inventory';
 import { Camera, Upload, X, Package } from 'lucide-react';
 
 interface AddItemFormProps {
+  categories: { id: string, name: string }[];
   onSuccess: () => void;
   onCancel: () => void;
 }
 
-export function AddItemForm({ onSuccess, onCancel }: AddItemFormProps) {
+export function AddItemForm({ categories, onSuccess, onCancel }: AddItemFormProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -170,6 +171,37 @@ export function AddItemForm({ onSuccess, onCancel }: AddItemFormProps) {
             required 
             className="rounded-xl h-11"
           />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="space-y-2">
+          <Label htmlFor="trackingType">Tracking Type</Label>
+          <select
+            id="trackingType"
+            name="trackingType"
+            className="flex h-11 w-full rounded-xl border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus:border-primary/50"
+            defaultValue="QUANTITY"
+          >
+            <option value="QUANTITY">Bulk Quantity (Standard)</option>
+            <option value="SERIALIZED">Individual Units (Serialized)</option>
+          </select>
+          <p className="text-[10px] text-muted-foreground font-medium">Use Serialized for items with unique serial numbers (Laptops, Tools, etc.)</p>
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="categoryId">Category</Label>
+          <select
+            id="categoryId"
+            name="categoryId"
+            className="flex h-11 w-full rounded-xl border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus:border-primary/50"
+          >
+            <option value="">Select a category</option>
+            {categories.map((cat) => (
+              <option key={cat.id} value={cat.id}>
+                {cat.name}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
 

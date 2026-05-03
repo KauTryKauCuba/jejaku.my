@@ -16,12 +16,15 @@ interface EditItemFormProps {
     minStock: number;
     unit: string;
     imageUrl: string | null;
+    categoryId?: string | null;
+    trackingType?: string | null;
   };
+  categories: { id: string, name: string }[];
   onSuccess: () => void;
   onCancel: () => void;
 }
 
-export function EditItemForm({ item, onSuccess, onCancel }: EditItemFormProps) {
+export function EditItemForm({ item, categories, onSuccess, onCancel }: EditItemFormProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(item.imageUrl || null);
@@ -154,6 +157,37 @@ export function EditItemForm({ item, onSuccess, onCancel }: EditItemFormProps) {
             required 
             className="rounded-xl h-11"
           />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="space-y-2">
+          <Label htmlFor="trackingType">Tracking Type</Label>
+          <select
+            id="trackingType"
+            name="trackingType"
+            defaultValue={item.trackingType || "QUANTITY"}
+            className="flex h-11 w-full rounded-xl border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus:border-primary/50"
+          >
+            <option value="QUANTITY">Bulk Quantity (Standard)</option>
+            <option value="SERIALIZED">Individual Units (Serialized)</option>
+          </select>
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="categoryId">Category</Label>
+          <select
+            id="categoryId"
+            name="categoryId"
+            defaultValue={item.categoryId || ""}
+            className="flex h-11 w-full rounded-xl border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus:border-primary/50"
+          >
+            <option value="">Select a category</option>
+            {categories.map((cat) => (
+              <option key={cat.id} value={cat.id}>
+                {cat.name}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
 
