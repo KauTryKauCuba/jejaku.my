@@ -59,7 +59,7 @@ export function EditItemForm({ item, onSuccess, onCancel }: EditItemFormProps) {
             defaultValue={item.name}
             placeholder="e.g. Mechanical Keyboard" 
             required 
-            className="rounded-xl h-10"
+            className="rounded-xl h-11"
           />
         </div>
         <div className="space-y-2">
@@ -70,7 +70,7 @@ export function EditItemForm({ item, onSuccess, onCancel }: EditItemFormProps) {
             defaultValue={item.sku}
             placeholder="e.g. KB-K3-001" 
             required 
-            className="rounded-xl h-10"
+            className="rounded-xl h-11"
           />
         </div>
       </div>
@@ -86,7 +86,7 @@ export function EditItemForm({ item, onSuccess, onCancel }: EditItemFormProps) {
             defaultValue={cleanPrice}
             placeholder="0.00" 
             required 
-            className="rounded-xl h-10"
+            className="rounded-xl h-11"
           />
         </div>
         <div className="space-y-2">
@@ -98,7 +98,7 @@ export function EditItemForm({ item, onSuccess, onCancel }: EditItemFormProps) {
             defaultValue={item.minStock}
             placeholder="5" 
             required 
-            className="rounded-xl h-10"
+            className="rounded-xl h-11"
           />
         </div>
       </div>
@@ -121,14 +121,14 @@ export function EditItemForm({ item, onSuccess, onCancel }: EditItemFormProps) {
           variant="outline" 
           onClick={onCancel} 
           disabled={loading}
-          className="rounded-xl h-10 px-6 font-normal"
+          className="rounded-xl h-11 px-6 font-normal"
         >
           Cancel
         </Button>
         <Button 
           type="submit" 
           disabled={loading}
-          className="rounded-xl h-10 px-8 font-normal"
+          className="rounded-xl h-11 px-8 font-normal"
         >
           {loading ? 'Saving...' : 'Save Changes'}
         </Button>

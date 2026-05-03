@@ -39,7 +39,7 @@ export function Modal({ isOpen, onClose, title, children, className }: ModalProp
       
       {/* Modal Content */}
       <div className={cn(
-        "relative w-full max-w-lg rounded-2xl border bg-card p-6 shadow-2xl animate-in zoom-in-95 fade-in duration-200",
+        "relative w-full max-w-lg rounded-2xl border bg-card p-6 animate-in zoom-in-95 fade-in duration-200",
         className
       )}>
         <div className="flex items-center justify-between mb-6">

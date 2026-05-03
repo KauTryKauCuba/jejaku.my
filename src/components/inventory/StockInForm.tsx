@@ -15,6 +15,13 @@ import {
   Info
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { 
+  Select, 
+  SelectContent, 
+  SelectItem, 
+  SelectTrigger, 
+  SelectValue 
+} from '@/components/ui/Select';
 
 interface StockInFormProps {
   items: { id: string; name: string; sku: string }[];
@@ -73,24 +80,24 @@ export function StockInForm({ items, locations, onSuccess }: StockInFormProps) {
             <Label htmlFor="itemId" className="text-xs font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
               <Package className="size-3.5" /> Select Product
             </Label>
-            <div className="relative group">
-              <select
-              id="itemId"
-              name="itemId"
-              required
-              defaultValue=""
-              className="w-full h-12 px-4 rounded-2xl border bg-card/50 appearance-none focus:ring-2 focus:ring-primary/20 transition-all outline-none font-medium pr-10"
-            >
-              <option value="" disabled>Choose an item...</option>
-                {items.map((item) => (
-                  <option key={item.id} value={item.id}>
-                    {item.name} ({item.sku})
-                  </option>
-                ))}
-              </select>
-              <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-muted-foreground group-focus-within:rotate-90 transition-transform">
-                <ChevronRight className="size-4" />
-              </div>
+            <div className="relative">
+              <Package className="absolute left-3 top-3.5 size-4 text-muted-foreground z-10 pointer-events-none" />
+              <Select 
+                name="itemId"
+                required 
+                defaultValue=""
+              >
+                <SelectTrigger className="pl-10 h-12 rounded-2xl border bg-card/50 !transition-none">
+                  <SelectValue placeholder="Choose an item..." />
+                </SelectTrigger>
+                <SelectContent>
+                  {items.map((item) => (
+                    <SelectItem key={item.id} value={item.id}>
+                      {item.name} ({item.sku})
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
           </div>
 
@@ -99,22 +106,24 @@ export function StockInForm({ items, locations, onSuccess }: StockInFormProps) {
             <Label htmlFor="locationId" className="text-xs font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
               <MapPin className="size-3.5" /> Warehouse Location
             </Label>
-            <div className="relative group">
-              <select
-                id="locationId"
+            <div className="relative">
+              <MapPin className="absolute left-3 top-3.5 size-4 text-muted-foreground z-10 pointer-events-none" />
+              <Select 
                 name="locationId"
-                required
-                className="w-full h-12 px-4 rounded-2xl border bg-card/50 appearance-none focus:ring-2 focus:ring-primary/20 transition-all outline-none font-medium pr-10"
+                required 
+                defaultValue={locations[0]?.id || ""}
               >
-                {locations.map((loc) => (
-                  <option key={loc.id} value={loc.id}>
-                    {loc.name}
-                  </option>
-                ))}
-              </select>
-              <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-muted-foreground group-focus-within:rotate-90 transition-transform">
-                <ChevronRight className="size-4" />
-              </div>
+                <SelectTrigger className="pl-10 h-12 rounded-2xl border bg-card/50 !transition-none">
+                  <SelectValue placeholder="Warehouse Location" />
+                </SelectTrigger>
+                <SelectContent>
+                  {locations.map((loc) => (
+                    <SelectItem key={loc.id} value={loc.id}>
+                      {loc.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
           </div>
         </div>
@@ -132,7 +141,7 @@ export function StockInForm({ items, locations, onSuccess }: StockInFormProps) {
               min="1"
               placeholder="0" 
               required 
-              className="h-12 rounded-2xl bg-card/50 border-border/60 focus:ring-primary/20 text-lg font-bold"
+              className="h-11 rounded-2xl bg-card/50 border-border/60 focus:ring-primary/20 text-lg font-bold"
             />
           </div>
 
@@ -145,7 +154,7 @@ export function StockInForm({ items, locations, onSuccess }: StockInFormProps) {
               id="reason" 
               name="reason" 
               placeholder="e.g. New Shipment, Purchase Order..." 
-              className="h-12 rounded-2xl bg-card/50 border-border/60 focus:ring-primary/20"
+              className="h-11 rounded-2xl bg-card/50 border-border/60 focus:ring-primary/20"
             />
           </div>
         </div>
@@ -154,7 +163,7 @@ export function StockInForm({ items, locations, onSuccess }: StockInFormProps) {
           <Button 
             type="submit" 
             disabled={loading}
-            className="w-full h-14 rounded-2xl font-bold text-lg shadow-xl shadow-primary/20 gap-3 group"
+            className="w-full h-11 rounded-2xl font-bold gap-3 group transition-all"
           >
             {loading ? (
               <div className="size-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />

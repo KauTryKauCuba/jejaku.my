@@ -47,7 +47,7 @@ export function AddItemForm({ onSuccess, onCancel }: AddItemFormProps) {
             name="name" 
             placeholder="e.g. Mechanical Keyboard" 
             required 
-            className="rounded-xl h-10"
+            className="rounded-xl h-11"
           />
         </div>
         <div className="space-y-2">
@@ -57,7 +57,7 @@ export function AddItemForm({ onSuccess, onCancel }: AddItemFormProps) {
             name="sku" 
             placeholder="e.g. KB-K3-001" 
             required 
-            className="rounded-xl h-10"
+            className="rounded-xl h-11"
           />
         </div>
       </div>
@@ -72,7 +72,7 @@ export function AddItemForm({ onSuccess, onCancel }: AddItemFormProps) {
             step="0.01" 
             placeholder="0.00" 
             required 
-            className="rounded-xl h-10"
+            className="rounded-xl h-11"
           />
         </div>
         <div className="space-y-2">
@@ -83,7 +83,7 @@ export function AddItemForm({ onSuccess, onCancel }: AddItemFormProps) {
             type="number" 
             placeholder="5" 
             required 
-            className="rounded-xl h-10"
+            className="rounded-xl h-11"
           />
         </div>
       </div>
@@ -106,14 +106,14 @@ export function AddItemForm({ onSuccess, onCancel }: AddItemFormProps) {
           variant="outline" 
           onClick={onCancel} 
           disabled={loading}
-          className="rounded-xl h-10 px-6 font-normal"
+          className="rounded-xl h-11 px-6 font-normal"
         >
           Cancel
         </Button>
         <Button 
           type="submit" 
           disabled={loading}
-          className="rounded-xl h-10 px-8 font-normal"
+          className="rounded-xl h-11 px-8 font-normal"
         >
           {loading ? 'Adding...' : 'Add Product'}
         </Button>
