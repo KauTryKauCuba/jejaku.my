@@ -201,7 +201,7 @@ export default async function DashboardPage() {
                     </div>
                     <div>
                       <p className="text-sm font-semibold group-hover:text-primary">{movement.item.name}</p>
-                      <p className="text-xs text-muted-foreground font-medium ">{movement.type} • {new Date(movement.createdAt).toLocaleString()}</p>
+                      <p className="text-xs text-muted-foreground font-medium " suppressHydrationWarning>{movement.type} • {new Date(movement.createdAt).toLocaleString()}</p>
                     </div>
                   </div>
                   <div className="text-right">

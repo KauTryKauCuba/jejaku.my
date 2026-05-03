@@ -173,8 +173,8 @@ export function TransactionListClient({ initialMovements }: TransactionListClien
                   </td>
                   <td className="p-4">
                     <div className="space-y-0.5">
-                      <p className="text-xs font-bold">{new Date(m.createdAt).toLocaleDateString()}</p>
-                      <p className="text-[10px] text-muted-foreground">{new Date(m.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                      <p className="text-xs font-bold" suppressHydrationWarning>{new Date(m.createdAt).toLocaleDateString()}</p>
+                      <p className="text-[10px] text-muted-foreground" suppressHydrationWarning>{new Date(m.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
                     </div>
                   </td>
                   <td className="p-4">

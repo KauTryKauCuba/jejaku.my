@@ -298,7 +298,7 @@ export function ItemListClient({ initialItems, stats }: ItemListClientProps) {
                   </td>
                   <td className="p-4">
                     {item.qrCode ? (
-                      <div className="size-10 bg-white border rounded-lg p-0.5 group-hover:scale-110 transition-transform cursor-zoom-in" title={item.qrCode}>
+                      <div className="size-10 bg-white border rounded-lg p-0.5" title={item.qrCode}>
                         <img 
                           src={`https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${item.qrCode}`} 
                           alt="QR"
