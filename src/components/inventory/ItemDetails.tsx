@@ -24,6 +24,8 @@ interface Item {
   price: string;
   status: string;
   unit: string;
+  imageUrl: string | null;
+  qrCode: string | null;
 }
 
 interface ItemDetailsProps {
@@ -36,8 +38,12 @@ export function ItemDetails({ item, onClose }: ItemDetailsProps) {
     <div className="space-y-6">
       {/* Top Banner Info */}
       <div className="flex items-start gap-4 p-4 rounded-2xl bg-muted/30 border border-border/50">
-        <div className="size-16 rounded-2xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
-          <Package className="size-8" />
+        <div className="size-16 rounded-2xl bg-muted border text-muted-foreground flex items-center justify-center shrink-0 overflow-hidden">
+          {item.imageUrl ? (
+            <img src={item.imageUrl} alt={item.name} className="size-full object-cover" />
+          ) : (
+            <Package className="size-8 text-muted-foreground/40" />
+          )}
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between gap-2">
@@ -51,7 +57,7 @@ export function ItemDetails({ item, onClose }: ItemDetailsProps) {
               {item.status}
             </span>
           </div>
-          <p className="text-xs text-muted-foreground font-medium uppercase tracking-tight mt-0.5">{item.sku}</p>
+          <p className="text-xs text-muted-foreground font-medium mt-0.5">{item.sku}</p>
           <div className="flex items-center gap-2 mt-2">
             <span className="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-background border text-muted-foreground">
               {item.category}
@@ -80,7 +86,7 @@ export function ItemDetails({ item, onClose }: ItemDetailsProps) {
 
       {/* Inventory Health */}
       <div className="space-y-3">
-        <h4 className="text-xs font-bold uppercase tracking-widest text-muted-foreground px-1">Stock Health</h4>
+        <h4 className="text-xs font-bold text-muted-foreground px-1">Stock Health</h4>
         <div className="p-4 rounded-2xl border bg-card/50 space-y-4">
           <div className="space-y-2">
             <div className="flex justify-between items-center">
@@ -110,7 +116,7 @@ export function ItemDetails({ item, onClose }: ItemDetailsProps) {
       {/* Tabs Placeholder (Quick Info) */}
       <div className="space-y-3">
         <div className="flex items-center justify-between px-1">
-          <h4 className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Quick Details</h4>
+          <h4 className="text-xs font-bold text-muted-foreground">Quick Details</h4>
           <Button variant="ghost" size="sm" className="h-6 text-[10px] font-bold">View History</Button>
         </div>
         <div className="divide-y border rounded-2xl overflow-hidden">
@@ -137,6 +143,27 @@ export function ItemDetails({ item, onClose }: ItemDetailsProps) {
           </div>
         </div>
       </div>
+      
+      {/* QR Code Section */}
+      {item.qrCode && (
+        <div className="space-y-3">
+          <h4 className="text-xs font-bold text-muted-foreground px-1">Product QR Label</h4>
+          <div className="flex items-center gap-4 p-4 rounded-2xl bg-white border border-border/40 shadow-sm">
+            <div className="size-20 bg-white p-1 border rounded-lg shrink-0">
+              <img 
+                src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${item.qrCode}`} 
+                alt="Product QR Code"
+                className="size-full"
+              />
+            </div>
+            <div className="space-y-1">
+              <p className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">Unique ID</p>
+              <p className="text-sm font-mono font-bold text-primary">{item.qrCode}</p>
+              <p className="text-[10px] text-muted-foreground font-medium">Scan this code for quick stock-in and stock-out actions.</p>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="pt-2">
         <Button onClick={onClose} className="w-full h-11 rounded-xl font-bold transition-all">

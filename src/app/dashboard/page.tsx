@@ -192,6 +192,13 @@ export default async function DashboardPage() {
                     }`}>
                       {(movement.type === 'IN' || movement.quantity > 0) ? <ArrowUpRight className="size-3.5" /> : <ArrowDownRight className="size-3.5" />}
                     </div>
+                    <div className="size-10 rounded-lg bg-muted border overflow-hidden shrink-0 flex items-center justify-center">
+                      {movement.item.imageUrl ? (
+                        <img src={movement.item.imageUrl} alt={movement.item.name} className="size-full object-cover" />
+                      ) : (
+                        <Package className="size-5 text-muted-foreground/40" />
+                      )}
+                    </div>
                     <div>
                       <p className="text-sm font-semibold group-hover:text-primary">{movement.item.name}</p>
                       <p className="text-xs text-muted-foreground font-medium ">{movement.type} • {new Date(movement.createdAt).toLocaleString()}</p>

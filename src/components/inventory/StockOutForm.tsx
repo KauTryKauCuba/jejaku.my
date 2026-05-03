@@ -77,7 +77,7 @@ export function StockOutForm({ items, locations, onSuccess }: StockOutFormProps)
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Item Selection */}
           <div className="space-y-3">
-            <Label htmlFor="itemId" className="text-xs font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
+            <Label htmlFor="itemId" className="text-xs font-bold text-muted-foreground flex items-center gap-2">
               <Package className="size-3.5" /> Select Product
             </Label>
             <div className="relative">
@@ -103,7 +103,7 @@ export function StockOutForm({ items, locations, onSuccess }: StockOutFormProps)
 
           {/* Location Selection */}
           <div className="space-y-3">
-            <Label htmlFor="locationId" className="text-xs font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
+            <Label htmlFor="locationId" className="text-xs font-bold text-muted-foreground flex items-center gap-2">
               <MapPin className="size-3.5" /> Source Location
             </Label>
             <div className="relative">
@@ -131,7 +131,7 @@ export function StockOutForm({ items, locations, onSuccess }: StockOutFormProps)
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Quantity */}
           <div className="space-y-3">
-            <Label htmlFor="quantity" className="text-xs font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
+            <Label htmlFor="quantity" className="text-xs font-bold text-muted-foreground flex items-center gap-2">
               <ArrowUpFromLine className="size-3.5" /> Quantity to Remove
             </Label>
             <Input 
@@ -147,7 +147,7 @@ export function StockOutForm({ items, locations, onSuccess }: StockOutFormProps)
 
           {/* Reason / Reference */}
           <div className="space-y-3">
-            <Label htmlFor="reason" className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
+            <Label htmlFor="reason" className="text-xs font-bold text-muted-foreground">
               Reference / Sale No (Optional)
             </Label>
             <Input 

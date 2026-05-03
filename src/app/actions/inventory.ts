@@ -5,7 +5,34 @@ import { items, stockMovements, stockLevels, locations } from '@/db/schema';
 import { getSession } from '@/lib/session';
 import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
-import { eq, and, sql } from 'drizzle-orm';
+import { eq, and, sql, inArray, desc } from 'drizzle-orm';
+
+export async function bulkDeleteItems(ids: string[]) {
+  const session = await getSession();
+  const userId = session?.userId;
+  if (!userId) return { error: 'Unauthorized' };
+
+  const user = await db.query.users.findFirst({
+    where: (users, { eq }) => eq(users.id, userId),
+  });
+
+  if (!user?.organizationId) return { error: 'No organization found' };
+
+  try {
+    await db.delete(items)
+      .where(and(
+        inArray(items.id, ids),
+        eq(items.organizationId, user.organizationId)
+      ));
+    
+    revalidatePath('/dashboard/items');
+    revalidatePath('/dashboard');
+    return { success: true };
+  } catch (error) {
+    console.error('Bulk Delete Error:', error);
+    return { error: 'Failed to delete items' };
+  }
+}
 
 const ItemSchema = z.object({
   name: z.string().min(2, 'Name is too short'),
@@ -14,6 +41,8 @@ const ItemSchema = z.object({
   price: z.string().regex(/^\d+(\.\d{1,2})?$/, 'Invalid price format'),
   minStock: z.coerce.number().min(0),
   unit: z.string().default('pcs'),
+  imageUrl: z.string().optional().nullable(),
+  qrCode: z.string().optional().nullable(),
 });
 
 const StockInSchema = z.object({
@@ -47,6 +76,7 @@ export async function addItem(formData: FormData) {
   }
 
   const rawData = Object.fromEntries(formData.entries());
+  console.log('AddItem FormData Keys:', Object.keys(rawData));
   const validated = ItemSchema.safeParse(rawData);
 
   if (!validated.success) {
@@ -65,8 +95,20 @@ export async function addItem(formData: FormData) {
     });
 
     if (existing) {
-      return { error: 'SKU already exists in your inventory' };
+      return { error: 'SKU already exists' };
     }
+
+    const imageFile = formData.get('image') as File;
+    let imageUrl = null;
+    if (imageFile && imageFile.size > 0) {
+      console.log('Processing image upload:', imageFile.name, imageFile.type, imageFile.size);
+      const buffer = Buffer.from(await imageFile.arrayBuffer());
+      imageUrl = `data:${imageFile.type};base64,${buffer.toString('base64')}`;
+      console.log('Image converted to base64, length:', imageUrl.length);
+    }
+
+    // Generate unique QR code
+    const qrCode = `JKQ-QR-${Math.random().toString(36).substring(2, 12).toUpperCase()}`;
 
     // 2. Insert Item
     const [newItem] = await db.insert(items).values({
@@ -77,7 +119,11 @@ export async function addItem(formData: FormData) {
       price,
       minStock,
       unit,
+      imageUrl: imageUrl || validated.data.imageUrl,
+      qrCode,
     }).returning();
+    
+    console.log('New Item added successfully:', { id: newItem.id, name: newItem.name, hasImage: !!newItem.imageUrl });
 
     // 3. Initialize stock levels if a default location exists
     const defaultLocation = await db.query.locations.findFirst({
@@ -133,7 +179,14 @@ export async function updateItem(id: string, formData: FormData) {
       )
     });
 
-    if (existing) return { error: 'SKU already exists in your inventory' };
+    if (existing) return { error: 'SKU already exists for another product' };
+
+    const imageFile = formData.get('image') as File;
+    let imageUrl = null;
+    if (imageFile && imageFile.size > 0) {
+      const buffer = Buffer.from(await imageFile.arrayBuffer());
+      imageUrl = `data:${imageFile.type};base64,${buffer.toString('base64')}`;
+    }
 
     await db.update(items)
       .set({
@@ -143,6 +196,7 @@ export async function updateItem(id: string, formData: FormData) {
         price,
         minStock,
         unit,
+        imageUrl: imageUrl || validated.data.imageUrl,
         updatedAt: new Date(),
       })
       .where(and(

@@ -1,4 +1,5 @@
 import React from 'react';
+export const dynamic = 'force-dynamic';
 import { db } from '@/db';
 import { items, organizations, users, categories, stockLevels } from '@/db/schema';
 import { eq, and, sql } from 'drizzle-orm';
@@ -59,7 +60,9 @@ export default async function ItemListPage() {
       minStock: item.minStock,
       price: `RM ${parseFloat(item.price || '0').toFixed(2)}`,
       status,
-      unit: item.unit || 'pcs'
+      unit: item.unit || 'pcs',
+      imageUrl: item.imageUrl,
+      qrCode: item.qrCode,
     };
   });
 

@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import { updateItem } from '@/app/actions/inventory';
+import { Camera, Upload, X, Package } from 'lucide-react';
 
 interface EditItemFormProps {
   item: {
@@ -14,6 +15,7 @@ interface EditItemFormProps {
     price: string;
     minStock: number;
     unit: string;
+    imageUrl: string | null;
   };
   onSuccess: () => void;
   onCancel: () => void;
@@ -22,6 +24,24 @@ interface EditItemFormProps {
 export function EditItemForm({ item, onSuccess, onCancel }: EditItemFormProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(item.imageUrl || null);
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const clearImage = () => {
+    setImagePreview(null);
+    const input = document.getElementById('image') as HTMLInputElement;
+    if (input) input.value = '';
+  };
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -49,6 +69,40 @@ export function EditItemForm({ item, onSuccess, onCancel }: EditItemFormProps) {
           {error}
         </div>
       )}
+
+      {/* Image Upload Section */}
+      <div className="flex flex-col items-center justify-center space-y-4 pb-4">
+        {imagePreview ? (
+          <div className="relative size-32 rounded-2xl overflow-hidden border-2 border-primary/20 shadow-md">
+            <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
+            <button 
+              type="button"
+              onClick={clearImage}
+              className="absolute top-1 right-1 p-1 rounded-full bg-destructive text-white hover:bg-destructive/90 transition-colors"
+            >
+              <X className="size-3" />
+            </button>
+          </div>
+        ) : (
+          <div className="relative size-32 rounded-2xl border-2 border-dashed border-muted-foreground/20 bg-muted/30 flex flex-col items-center justify-center gap-2 group hover:border-primary/40 transition-all overflow-hidden">
+            <div className="flex flex-col items-center justify-center text-muted-foreground group-hover:text-primary transition-colors">
+              <Camera className="size-8 mb-1" />
+              <span className="text-[10px] font-bold uppercase tracking-tight">Add Photo</span>
+            </div>
+            <input 
+              id="image"
+              name="image"
+              type="file" 
+              accept="image/*"
+              capture="environment"
+              onChange={handleImageChange}
+              className="absolute inset-0 opacity-0 cursor-pointer"
+            />
+          </div>
+        )}
+        <input type="hidden" name="imageUrl" value={imagePreview || ''} />
+        <p className="text-[10px] text-muted-foreground font-medium">Update or take a photo of the product</p>
+      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-2">

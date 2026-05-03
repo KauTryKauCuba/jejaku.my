@@ -24,7 +24,8 @@ import { Modal } from '@/components/ui/Modal';
 import { AddItemForm } from './AddItemForm';
 import { EditItemForm } from './EditItemForm';
 import { ItemDetails } from './ItemDetails';
-import { deleteItem } from '@/app/actions/inventory';
+import { deleteItem, bulkDeleteItems } from '@/app/actions/inventory';
+import { useRouter } from 'next/navigation';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -44,6 +45,8 @@ interface Item {
   price: string;
   status: string;
   unit: string;
+  imageUrl: string | null;
+  qrCode: string | null;
 }
 
 interface ItemListClientProps {
@@ -56,6 +59,7 @@ interface ItemListClientProps {
 }
 
 export function ItemListClient({ initialItems, stats }: ItemListClientProps) {
+  const router = useRouter();
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -63,6 +67,37 @@ export function ItemListClient({ initialItems, stats }: ItemListClientProps) {
   const [selectedItem, setSelectedItem] = useState<Item | null>(null);
   const [search, setSearch] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [isBulkDeleting, setIsBulkDeleting] = useState(false);
+  const [isBulkDeleteModalOpen, setIsBulkDeleteModalOpen] = useState(false);
+
+  const toggleSelectAll = () => {
+    if (selectedIds.length === filteredItems.length && filteredItems.length > 0) {
+      setSelectedIds([]);
+    } else {
+      setSelectedIds(filteredItems.map(i => i.id));
+    }
+  };
+
+  const toggleSelect = (id: string) => {
+    setSelectedIds(prev => 
+      prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
+    );
+  };
+
+  const confirmBulkDelete = async () => {
+    if (selectedIds.length === 0) return;
+    setIsBulkDeleting(true);
+    const result = await bulkDeleteItems(selectedIds);
+    if (result.success) {
+      setIsBulkDeleteModalOpen(false);
+      setSelectedIds([]);
+      router.refresh();
+    } else {
+      alert(result.error || 'Failed to delete items');
+    }
+    setIsBulkDeleting(false);
+  };
 
   const filteredItems = initialItems.filter(item => 
     item.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -179,19 +214,55 @@ export function ItemListClient({ initialItems, stats }: ItemListClientProps) {
       </div>
 
       {/* Item Table */}
+      <div className="relative">
+        {/* Bulk Actions Toolbar */}
+        {selectedIds.length > 0 && (
+          <div className="absolute -top-14 left-0 right-0 h-12 bg-primary rounded-xl flex items-center justify-between px-4 animate-in slide-in-from-bottom-2 duration-200 z-50">
+            <div className="flex items-center gap-3">
+              <span className="text-sm font-bold text-primary-foreground">
+                {selectedIds.length} items selected
+              </span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="h-8 text-primary-foreground hover:bg-white/10"
+                onClick={() => setSelectedIds([])}
+              >
+                Clear
+              </Button>
+              <Button 
+                variant="destructive" 
+                size="sm" 
+                className="h-8 bg-white text-destructive hover:bg-white/90 border-0"
+                onClick={() => setIsBulkDeleteModalOpen(true)}
+              >
+                <Trash2 className="size-4 mr-2" />
+                Delete Selected
+              </Button>
+            </div>
+          </div>
+        )}
       <div className="rounded-2xl border bg-card overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="border-b bg-muted/20">
                 <th className="p-4 w-10 text-xs font-semibold text-muted-foreground">
-                  <input type="checkbox" className="rounded border-muted-foreground/30 accent-primary" />
+                  <input 
+                    type="checkbox" 
+                    className="rounded border-muted-foreground/30 accent-primary cursor-pointer"
+                    checked={selectedIds.length === filteredItems.length && filteredItems.length > 0}
+                    onChange={toggleSelectAll}
+                  />
                 </th>
                 <th className="p-4 text-xs font-semibold text-muted-foreground">
                   <div className="flex items-center gap-2 cursor-pointer hover:text-primary">
                     Product <ArrowUpDown className="size-3" />
                   </div>
                 </th>
+                <th className="p-4 text-xs font-semibold text-muted-foreground">QR CODE</th>
                 <th className="p-4 text-xs font-semibold text-muted-foreground">Category</th>
                 <th className="p-4 text-xs font-semibold text-muted-foreground">Stock Level</th>
                 <th className="p-4 text-xs font-semibold text-muted-foreground text-right">Price</th>
@@ -203,18 +274,40 @@ export function ItemListClient({ initialItems, stats }: ItemListClientProps) {
               {filteredItems.length > 0 ? filteredItems.map((item) => (
                 <tr key={item.id} className="hover:bg-muted/30 group transition-colors">
                   <td className="p-4">
-                    <input type="checkbox" className="rounded border-muted-foreground/30 accent-primary" />
+                    <input 
+                      type="checkbox" 
+                      className="rounded border-muted-foreground/30 accent-primary cursor-pointer"
+                      checked={selectedIds.includes(item.id)}
+                      onChange={() => toggleSelect(item.id)}
+                    />
                   </td>
                   <td className="p-4">
                     <div className="flex items-center gap-3">
-                      <div className="size-10 rounded-xl bg-muted/50 border flex items-center justify-center shrink-0">
-                        <Package className="size-5 text-muted-foreground/60" />
+                      <div className="size-10 rounded-lg bg-muted border overflow-hidden shrink-0 flex items-center justify-center">
+                        {item.imageUrl ? (
+                          <img src={item.imageUrl} alt={item.name} className="size-full object-cover" />
+                        ) : (
+                          <Package className="size-5 text-muted-foreground/40" />
+                        )}
                       </div>
                       <div>
                         <p className="text-sm font-semibold group-hover:text-primary transition-colors">{item.name}</p>
-                        <p className="text-[11px] text-muted-foreground font-medium uppercase tracking-tight">{item.sku}</p>
+                        <p className="text-[11px] text-muted-foreground font-medium">{item.sku}</p>
                       </div>
                     </div>
+                  </td>
+                  <td className="p-4">
+                    {item.qrCode ? (
+                      <div className="size-10 bg-white border rounded-lg p-0.5 group-hover:scale-110 transition-transform cursor-zoom-in" title={item.qrCode}>
+                        <img 
+                          src={`https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${item.qrCode}`} 
+                          alt="QR"
+                          className="size-full"
+                        />
+                      </div>
+                    ) : (
+                      <span className="text-[10px] text-muted-foreground">None</span>
+                    )}
                   </td>
                   <td className="p-4">
                     <span className="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-muted border text-muted-foreground">
@@ -259,7 +352,7 @@ export function ItemListClient({ initialItems, stats }: ItemListClientProps) {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end" className="w-40 rounded-xl">
-                        <DropdownMenuLabel className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest px-3">Actions</DropdownMenuLabel>
+                        <DropdownMenuLabel className="text-[10px] font-bold text-muted-foreground px-3">Actions</DropdownMenuLabel>
                         <DropdownMenuItem 
                           className="gap-2 px-3 py-2 cursor-pointer rounded-lg mx-1"
                           onClick={() => handleViewDetails(item)}
@@ -299,6 +392,7 @@ export function ItemListClient({ initialItems, stats }: ItemListClientProps) {
           </table>
         </div>
       </div>
+    </div>
 
       {/* Add Item Modal */}
       <Modal 
@@ -331,6 +425,39 @@ export function ItemListClient({ initialItems, stats }: ItemListClientProps) {
             }} 
           />
         )}
+      </Modal>
+
+      {/* Bulk Delete Confirmation Modal */}
+      <Modal
+        isOpen={isBulkDeleteModalOpen}
+        onClose={() => setIsBulkDeleteModalOpen(false)}
+        title="Delete Multiple Items"
+        className="max-w-md"
+      >
+        <div className="space-y-4">
+          <p className="text-sm text-muted-foreground leading-relaxed">
+            Are you sure you want to delete <span className="font-bold text-foreground">{selectedIds.length}</span> items? 
+            This action cannot be undone and will remove all associated stock data for these products.
+          </p>
+          <div className="flex items-center justify-end gap-3 pt-2">
+            <Button 
+              variant="outline" 
+              onClick={() => setIsBulkDeleteModalOpen(false)}
+              disabled={isBulkDeleting}
+              className="rounded-xl h-11 font-normal"
+            >
+              Cancel
+            </Button>
+            <Button 
+              variant="destructive" 
+              onClick={confirmBulkDelete}
+              disabled={isBulkDeleting}
+              className="rounded-xl h-11 px-6 font-normal"
+            >
+              {isBulkDeleting ? 'Deleting...' : 'Delete Items'}
+            </Button>
+          </div>
+        </div>
       </Modal>
 
       {/* Delete Confirmation Modal */}

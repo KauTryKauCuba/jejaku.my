@@ -136,9 +136,16 @@ export function TransactionListClient({ initialMovements }: TransactionListClien
                   </td>
                   <td className="p-4">
                     <div className="flex items-center gap-3">
+                      <div className="size-10 rounded-lg bg-muted border overflow-hidden shrink-0 flex items-center justify-center">
+                        {m.item.imageUrl ? (
+                          <img src={m.item.imageUrl} alt={m.item.name} className="size-full object-cover" />
+                        ) : (
+                          <Package className="size-5 text-muted-foreground/40" />
+                        )}
+                      </div>
                       <div>
                         <p className="text-sm font-semibold group-hover:text-primary transition-colors">{m.item.name}</p>
-                        <p className="text-[11px] text-muted-foreground font-medium uppercase tracking-tight">{m.item.sku}</p>
+                        <p className="text-[11px] text-muted-foreground font-medium tracking-tight">{m.item.sku}</p>
                       </div>
                     </div>
                   </td>

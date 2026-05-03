@@ -46,6 +46,8 @@ export const items = pgTable('items', {
   price: decimal('price', { precision: 12, scale: 2 }).default('0.00'),
   minStock: integer('min_stock').default(0).notNull(),
   unit: text('unit').default('pcs').notNull(), // pcs, kg, box, etc.
+  imageUrl: text('image_url'),
+  qrCode: text('qr_code').unique(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
