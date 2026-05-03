@@ -10,6 +10,7 @@ services:
     environment:
       - NODE_ENV=production
       - DATABASE_URL=postgres://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-password}@db:5432/${POSTGRES_DB:-jejaku_db}
+      - SESSION_SECRET=${SESSION_SECRET}
     depends_on:
       db:
         condition: service_healthy
@@ -19,7 +20,7 @@ services:
       context: .
       dockerfile: Dockerfile
       target: builder
-    command: npx drizzle-kit push
+    command: npx drizzle-kit push --force
     environment:
       - DATABASE_URL=postgres://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-password}@db:5432/${POSTGRES_DB:-jejaku_db}
     depends_on:

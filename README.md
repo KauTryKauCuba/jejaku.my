@@ -2,17 +2,28 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
-First, run the development server:
+Follow these steps to get the project up and running locally or on a server:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+1. **Clone the repository**:
+   ```bash
+   git clone <repo_url>
+   cd jejaku.my
+   ```
+
+2. **Configure environment variables**:
+   ```bash
+   cp .env.example .env
+   ```
+   Run the following command to generate a secret key:
+   ```bash
+   openssl rand -hex 32
+   ```
+   Paste the output into your `.env` file as the `SESSION_SECRET`.
+
+3. **Launch with Docker**:
+   ```bash
+   docker compose up -d --build
+   ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
