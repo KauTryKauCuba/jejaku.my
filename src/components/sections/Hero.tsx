@@ -175,7 +175,7 @@ export const Hero = () => {
             <div className="ring-background bg-background relative overflow-hidden rounded-2xl border p-2 md:p-4 ring-1 shadow-2xl">
               <Image
                 className="bg-background aspect-[15/8] relative hidden rounded-2xl dark:block"
-                src="/assets/screens/mail2.png"
+                src="/assets/screens/dark.png"
                 alt="app screen dark mode"
                 width={2700}
                 height={1440}
@@ -183,7 +183,7 @@ export const Hero = () => {
               />
               <Image
                 className="z-2 border-border/25 aspect-[15/8] relative rounded-2xl border dark:hidden"
-                src="/assets/screens/mail2-light.png"
+                src="/assets/screens/light.png"
                 alt="app screen light mode"
                 width={2700}
                 height={1440}

@@ -80,14 +80,15 @@ export const Features = () => {
           {features.map((feature, i) => (
             <div
               key={i}
-              className="group relative p-8 rounded-3xl border bg-card/50 backdrop-blur-sm hover:border-primary/50 transition-all duration-300 hover:shadow-2xl hover:shadow-primary/5"
+              className="group relative p-8 rounded-3xl border bg-card/50 backdrop-blur-sm hover:border-primary/50 transition-all duration-300 hover:shadow-2xl hover:shadow-primary/5 flex flex-col items-center text-center"
             >
               <div className={cn(
                 "size-12 rounded-2xl flex items-center justify-center mb-6 transition-transform duration-500 group-hover:scale-110",
                 feature.bg,
-                feature.color
+                feature.color,
+                "icon-animate-container"
               )}>
-                <feature.icon className="size-6" />
+                <feature.icon className="size-6 icon-drawing-path" />
               </div>
               <h3 className="text-xl font-bold mb-3">{feature.title}</h3>
               <p className="text-muted-foreground leading-relaxed text-sm group-hover:text-foreground/80 transition-colors">
@@ -109,6 +110,39 @@ export const Features = () => {
           </div>
         </div>
       </div>
+
+      <style jsx global>{`
+        @keyframes icon-draw {
+          0% {
+            stroke-dasharray: 100;
+            stroke-dashoffset: 100;
+          }
+          50% {
+            stroke-dashoffset: 0;
+            stroke-dasharray: 100;
+          }
+          100% {
+            stroke-dashoffset: 0;
+            stroke-dasharray: 100;
+          }
+        }
+
+        .icon-drawing-path path, 
+        .icon-drawing-path circle, 
+        .icon-drawing-path rect,
+        .icon-drawing-path polyline,
+        .icon-drawing-path line {
+          stroke-dasharray: 100;
+          stroke-dashoffset: 100;
+          animation: icon-draw 3s ease-in-out infinite;
+        }
+
+        .icon-animate-container:nth-child(2) .icon-drawing-path path { animation-delay: 0.2s; }
+        .icon-animate-container:nth-child(3) .icon-drawing-path path { animation-delay: 0.4s; }
+        .icon-animate-container:nth-child(4) .icon-drawing-path path { animation-delay: 0.6s; }
+        .icon-animate-container:nth-child(5) .icon-drawing-path path { animation-delay: 0.8s; }
+        .icon-animate-container:nth-child(6) .icon-drawing-path path { animation-delay: 1s; }
+      `}</style>
     </section>
   );
 };
