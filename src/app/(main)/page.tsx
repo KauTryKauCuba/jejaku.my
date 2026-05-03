@@ -1,5 +1,6 @@
 import { Hero } from "@/components/sections/Hero";
 import { SimplestSolution } from "@/components/sections/SimplestSolution";
+import { Features } from "@/components/sections/Features";
 
 export default function Home() {
   return (
@@ -7,6 +8,7 @@ export default function Home() {
       <main className="overflow-hidden">
         <Hero />
         <SimplestSolution />
+        <Features />
       </main>
     </>
   );

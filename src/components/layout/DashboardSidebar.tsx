@@ -224,16 +224,8 @@ export function DashboardSidebar({ user, isMobileOpen, setIsMobileOpen }: Dashbo
         </div>
 
         <div className="flex-1 py-4 px-3 space-y-6 overflow-y-auto overflow-x-hidden custom-scrollbar">
-          <div className="space-y-1">
-            {navItems.map((item) => (
-              <NavLink key={item.name} item={item} />
-            ))}
-          </div>
-        </div>
-
-        <div className="p-4 border-t">
           <div className={cn(
-            "flex items-center rounded-xl bg-muted/30 border border-border/40 overflow-hidden p-2 gap-3",
+            "flex items-center rounded-xl bg-muted/30 border border-border/40 overflow-hidden p-2 gap-3 mb-4",
             isCollapsed && "justify-center px-0 bg-transparent border-none"
           )}>
             <div className="size-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground font-bold text-xs shrink-0">
@@ -241,10 +233,16 @@ export function DashboardSidebar({ user, isMobileOpen, setIsMobileOpen }: Dashbo
             </div>
             {!isCollapsed && (
               <div className="flex-1 min-w-0">
-                <p className="text-xs font-bold truncate leading-none mb-1">{user.organizationName || 'My Company'}</p>
-                <p className="text-[10px] text-muted-foreground truncate">{user.email}</p>
+                <p className="text-[12px] font-bold truncate leading-none mb-1">{user.organizationName || 'My Company'}</p>
+                <p className="text-[12px] text-muted-foreground truncate">{user.email}</p>
               </div>
             )}
+          </div>
+
+          <div className="space-y-1">
+            {navItems.map((item) => (
+              <NavLink key={item.name} item={item} />
+            ))}
           </div>
         </div>
       </aside>
